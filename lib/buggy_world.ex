@@ -11,6 +11,10 @@ defmodule BuggyWorld do
     GenServer.call(pid, {:move, %{player: handle, action: %{move: movement}}})
   end
 
+  def get_world(pid) do
+    GenServer.call(pid, :noop)
+  end
+
   # Server (callbacks)
   @impl true
   def init(world) do
@@ -18,7 +22,11 @@ defmodule BuggyWorld do
   end
 
   @impl true
-  def handle_call({:move, action = %{player: handle, action: %{move: movement}}}, _from, world) do
+  def handle_call(:noop, _from, world) do
+    {:reply, world, world}
+  end
+
+  def handle_call({:move, %{player: handle, action: %{move: movement}} = action}, _from, world) do
     case EvolveWorld.next_world({:world, world}, action) do
       {:ok, client_world, server_world} -> {:reply, {:ok, client_world}, server_world}
       err  -> {:reply, err, world}

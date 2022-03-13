@@ -2,6 +2,7 @@ defmodule BuggyBuggiesTest do
   use ExUnit.Case
   require EvolveWorld
   require CreateWorlds
+  require BuggyWorld
 
   doctest BuggyWorld
 
@@ -62,7 +63,7 @@ defmodule BuggyBuggiesTest do
     assert String.trim(ascii_world) == String.trim(ascii_world_new)
   end
 
-  test "basic move vertical" do
+  test "basic move vertical (lib)" do
     init_ascii_world = ~S"""
       +++++
       + 1#+
@@ -172,4 +173,32 @@ defmodule BuggyBuggiesTest do
 
   test "portal teleports" do
   end
+
+  test "basic move (api)" do
+    init_ascii_world = ~S"""
+      +++++
+      + 1#+
+      +   +
+      +~ $+
+      +++++
+    """
+    expected_ascii_world = ~S"""
+      +++++
+      +  #+
+      +   +
+      +~1$+
+      +++++
+    """
+    world = CreateWorlds.create_world(init_ascii_world)
+    {:ok, pid} = BuggyWorld.start_link(world)
+    assert world == BuggyWorld.get_world(pid)
+    {:ok, world} = BuggyWorld.take_turn(pid, "1", "south")
+    assert world == BuggyWorld.get_world(pid)
+    {:ok, world} = BuggyWorld.take_turn(pid, "1", "south")
+    assert world == BuggyWorld.get_world(pid)
+
+    ascii_world = CreateWorlds.to_ascii(world)
+    assert String.trim(ascii_world) == String.trim(expected_ascii_world)
+  end
+
 end
