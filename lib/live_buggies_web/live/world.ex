@@ -1,17 +1,17 @@
 defmodule LiveBuggiesWeb.LiveWorld do
   use Phoenix.LiveView
 
-  @topic "live"
+  @topic "888"
 
-  def mount(session, params, socket) do
-    # subscribe to the channel
+  def mount(%{"world_id" => world_id} = session, params, socket) do
     IO.inspect(session, label: "SESSION")
     Registry.register(:liveview_world_lookup, 123, nil)
     LiveBuggiesWeb.Endpoint.subscribe(@topic)
     {:ok, assign(socket, :val, 0)}
   end
 
-  def handle_event("inc", _value, socket) do
+  def handle_event("inc", value, socket) do
+    IO.inspect(value, label: "HANDLE EVENT")
     new_state = update(socket, :val, &(&1 + 1))
     LiveBuggiesWeb.Endpoint.broadcast_from(self(), @topic, "inc", new_state.assigns)
     {:noreply, new_state}
@@ -28,16 +28,19 @@ defmodule LiveBuggiesWeb.LiveWorld do
   end
 
   def inc(pid) do
-    #IO.inspect("INC")
-    GenServer.call(pid, "inc")
+    GenServer.cast(pid, "inc")
   end
 
   def handle_call(arg, pid, socket) do
-    #IO.inspect(arg, label: "INC HANDLED")
     new_state = update(socket, :val, &(&1 - 1))
-    IO.inspect({socket, new_state}, label: "HERE")
     LiveBuggiesWeb.Endpoint.broadcast_from(self(), @topic, "dec", new_state.assigns)
     {:reply, :cool, new_state}
+  end
+
+  def handle_cast(arg, socket) do
+    new_state = update(socket, :val, &(&1 - 1))
+    LiveBuggiesWeb.Endpoint.broadcast_from(self(), @topic, "dec", new_state.assigns)
+    {:noreply, new_state}
   end
 
   def render(assigns) do

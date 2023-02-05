@@ -12,7 +12,7 @@ config :live_buggies, LiveBuggiesWeb.Endpoint,
   http: [ip: {127, 0, 0, 1}, port: 4000],
   check_origin: false,
   code_reloader: true,
-  debug_errors: true,
+  debug_errors: false,
   secret_key_base: "k7Q2r52bt3cG1t1Nn1azqKDzqVzEYajFzBiy2zYniudfzN05aB1NQZ6ZUPXPSSPq",
   watchers: [
     # Start the esbuild watcher by calling Esbuild.install_and_run(:default, args)
