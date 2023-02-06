@@ -12,6 +12,7 @@ defmodule LiveBuggies.Application do
       LiveBuggiesWeb.Telemetry,
       # Start the PubSub system
       {Phoenix.PubSub, name: LiveBuggies.PubSub},
+      BuggyBuggies.GameManager,
       {Registry, keys: :unique, name: :liveview_world_lookup},
 
       # Start the Endpoint (http/https)
