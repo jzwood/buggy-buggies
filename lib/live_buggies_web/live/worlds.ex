@@ -19,7 +19,11 @@ defmodule LiveBuggiesWeb.LiveWorlds do
       <h1>Worlds</h1>
       <ul>
         <%= for world_id <- @worlds do %>
-          <li><%= world_id %></li>
+          <li>
+            <a data-phx-link="redirect" data-phx-link-state="push" href="/world/<%= world_id %>">
+              <%= world_id %>
+            </a>
+          </li>
         <% end %>
       </ul>
     </div>
