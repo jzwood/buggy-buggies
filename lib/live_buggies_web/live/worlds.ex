@@ -1,0 +1,28 @@
+defmodule LiveBuggiesWeb.LiveWorlds do
+  use Phoenix.LiveView
+
+  @world_list_topic "worlds"
+
+  def mount(session, params, socket) do
+    LiveBuggiesWeb.Endpoint.subscribe(@world_list_topic)
+    world_ids = LiveBuggies.GameManager.list_worlds()
+    {:ok, assign(socket, :worlds, world_ids)}
+  end
+
+  def handle_info(msg, socket) do
+    {:noreply, assign(socket, worlds: msg.payload)}
+  end
+
+  def render(assigns) do
+    ~L"""
+    <div>
+      <h1>Worlds</h1>
+      <ul>
+        <%= for world_id <- @worlds do %>
+          <li><%= world_id %></li>
+        <% end %>
+      </ul>
+    </div>
+    """
+  end
+end

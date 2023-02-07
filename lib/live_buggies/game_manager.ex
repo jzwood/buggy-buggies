@@ -1,8 +1,9 @@
-defmodule BuggyBuggies.GameManager do
+defmodule LiveBuggies.GameManager do
   use GenServer
 
   @init_state %State{}
   @worlds CreateWorlds.get_ascii_worlds() |> CreateWorlds.create_worlds() |> Enum.reverse()
+  @world_list_topic "worlds"
 
   # Public API
   def start_link(_args) do
@@ -28,6 +29,10 @@ defmodule BuggyBuggies.GameManager do
     GenServer.call(__MODULE__, {:info, game_id})
   end
 
+  def list_worlds() do
+    GenServer.call(__MODULE__, :list_worlds)
+  end
+
   def move(game_id: game_id, secret: secret, move: move) do
     GenServer.call(__MODULE__, {:move, game_id, secret, move})
   end
@@ -51,7 +56,15 @@ defmodule BuggyBuggies.GameManager do
     }
 
     state = State.upsert_game(state, game_id, game)
+
+    LiveBuggiesWeb.Endpoint.broadcast_from(self(), @world_list_topic, "update_world_list", Map.keys(state.games))
+
     {:reply, {:ok, %{game_id: game_id, secret: secret}}, state}
+  end
+
+  @impl true
+  def handle_call(:list_worlds, _from, state) do
+    {:reply, Map.keys(state.games), state}
   end
 
   @impl true

@@ -24,6 +24,7 @@ defmodule LiveBuggiesWeb.Router do
   scope "/", LiveBuggiesWeb do
     pipe_through :browser
 
+    live("/worlds", LiveWorlds)
     live("/world/:world_id", LiveWorld)
   end
 

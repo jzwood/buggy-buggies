@@ -1,10 +1,8 @@
 defmodule LiveBuggiesWeb.LiveWorld do
   use Phoenix.LiveView
 
-  @topic "888"
-
   def mount(%{"world_id" => world_topic} = session, params, socket) do
-    IO.inspect(session, label: "SESSION")
+    #IO.inspect(session, label: "SESSION")
     Registry.register(:liveview_world_lookup, world_topic, nil)
     LiveBuggiesWeb.Endpoint.subscribe(world_topic)
     {:ok, assign(socket, :val, 0)}

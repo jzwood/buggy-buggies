@@ -57,7 +57,9 @@ defmodule LiveBuggies.MixProject do
   defp aliases do
     [
       setup: ["deps.get"],
-      "assets.deploy": ["esbuild default --minify", "phx.digest"]
+      "assets.deploy": ["esbuild default --minify", "phx.digest"],
+      start: ["phx.server"],
+      c: ["compile"]
     ]
   end
 end
