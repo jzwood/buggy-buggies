@@ -1,0 +1,10 @@
+.map-container {
+  background-color: gray;
+}
+
+svg.map {
+  width: 100%;
+  height: auto;
+  background-color: transparent;
+  max-height: 100vh;
+}

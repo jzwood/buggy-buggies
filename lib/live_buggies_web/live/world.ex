@@ -32,7 +32,7 @@ defmodule LiveBuggiesWeb.LiveWorld do
 
   defp tile_to_img(tile) do
     case tile do
-      :empty -> "/images/gold.png"
+      :empty -> "/images/empty.png"
       :wall ->  "/images/wall.png"
       :water ->  "/images/water.png"
       :crate ->  "/images/crate.png"
@@ -47,12 +47,12 @@ defmodule LiveBuggiesWeb.LiveWorld do
     {mw, mh} = get_world_dimensions(assigns.game.world)
     #IO.inspect(assigns, label: "ASSIGN")
     ~L"""
-    <div>
+    <div class="map-container">
       <svg
         viewBox="0 0 <%= mw + 1 %> <%= mh + 1 %>"
-        style="width: 100%; height: auto; backgroundColor: transparent"
         xmlns="http://www.w3.org/2000/svg"
         version="1.1"
+        class="map"
       >
       <%= for {{x, y}, cell} <- @game.world do %>
         <image href="<%= tile_to_img(cell) %>" x="<%= x %>" y="<%= y %>" height="1" width="1"/>
