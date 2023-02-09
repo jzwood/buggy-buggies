@@ -53,11 +53,11 @@ defmodule LiveBuggies.GameManager do
       world: world,
       host_secret: secret,
       players: %{secret => %Player{handle: handle, x: 0, y: 0}}
-    }
+    } |> IO.inspect(label: "H1")
 
-    state = State.upsert_game(state, game_id, game)
+    state = State.upsert_game(state, game_id, game) |> IO.inspect(label: "HOST")
 
-    LiveBuggiesWeb.Endpoint.broadcast_from(self(), @world_list_topic, "update_world_list", Map.keys(state.games))
+    LiveBuggiesWeb.LiveWorlds.update_world_list(Map.keys(state.games))
 
     {:reply, {:ok, %{game_id: game_id, secret: secret}}, state}
   end

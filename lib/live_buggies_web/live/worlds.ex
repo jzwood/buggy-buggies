@@ -13,6 +13,11 @@ defmodule LiveBuggiesWeb.LiveWorlds do
     {:noreply, assign(socket, worlds: msg.payload)}
   end
 
+  def update_world_list(world_ids) do
+    # this broadcast gets picked up by handle_info
+    LiveBuggiesWeb.Endpoint.broadcast_from(self(), @world_list_topic, "update_world_list", world_ids)
+  end
+
   def render(assigns) do
     ~L"""
     <div>
