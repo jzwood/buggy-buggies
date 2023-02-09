@@ -26,11 +26,38 @@ defmodule LiveBuggiesWeb.LiveWorld do
     #{:noreply, new_state}
   #end
 
+  defp get_world_dimensions(world) do
+    Enum.reduce(world, {0, 0}, fn {{x, y}, val}, {mw, mh} -> {max(mw, x), max(mh, y)} end)
+  end
+
+  defp tile_to_img(tile) do
+    case tile do
+      :empty -> "/images/gold.png"
+      :wall ->  "/images/wall.png"
+      :water ->  "/images/water.png"
+      :crate ->  "/images/crate.png"
+      :portal ->  ""
+      :coin ->  "/images/gold.png"
+      :trap ->  ""
+      :spawn ->  ""
+    end
+  end
+
   def render(assigns) do
-    IO.inspect(assigns, label: "ASSIGN")
+    {mw, mh} = get_world_dimensions(assigns.game.world)
+    #IO.inspect(assigns, label: "ASSIGN")
     ~L"""
     <div>
-      <h1>The count is: <%= @game.host_secret %></h1>
+      <svg
+        viewBox="0 0 <%= mw + 1 %> <%= mh + 1 %>"
+        style="width: 100%; height: auto; backgroundColor: transparent"
+        xmlns="http://www.w3.org/2000/svg"
+        version="1.1"
+      >
+      <%= for {{x, y}, cell} <- @game.world do %>
+        <image href="<%= tile_to_img(cell) %>" x="<%= x %>" y="<%= y %>" height="1" width="1"/>
+      <% end %>
+      </svg>
     </div>
     """
   end
