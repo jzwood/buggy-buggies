@@ -1,7 +1,8 @@
 defmodule LiveBuggiesWeb.LiveWorld do
   use Phoenix.LiveView
+  use Phoenix.HTML
 
-  def mount(%{"world_id" => world_id} = session, params, socket) do
+  def mount(%{"world_id" => world_id} = _session, _params, socket) do
     Registry.register(:liveview_world_lookup, world_id, nil)
     game = LiveBuggies.GameManager.info(game_id: world_id)
     LiveBuggiesWeb.Endpoint.subscribe(world_id)
@@ -20,24 +21,19 @@ defmodule LiveBuggiesWeb.LiveWorld do
     LiveBuggiesWeb.Endpoint.broadcast_from(self(), world_id, "update_world", game: game)
   end
 
-  #def handle_cast(world_id, socket) do
-    #new_state = update(socket, :val, &(&1 - 1))
-    #LiveBuggiesWeb.Endpoint.broadcast_from(self(), world_id, "dec", new_state.assigns)
-    #{:noreply, new_state}
-  #end
-
   defp get_world_dimensions(world) do
-    Enum.reduce(world, {0, 0}, fn {{x, y}, val}, {mw, mh} -> {max(mw, x), max(mh, y)} end)
+    {mw, mh} = Enum.reduce(world, {0, 0}, fn {{x, y}, _val}, {mw, mh} -> {max(mw, x), max(mh, y)} end)
+    {mw + 1, mh + 1}
   end
 
-  defp tile_to_img(tile) do
+  defp tile_to_svg(tile, x, y) do
     case tile do
-      :empty -> "/images/empty.png"
-      :wall ->  "/images/wall.png"
-      :water ->  "/images/water.png"
-      :crate ->  "/images/crate.png"
+      :empty -> ""
+      :wall ->  "<rect x='#{x}' y='#{y}' width='1' height='1' fill='#CCC' shape-rendering='geometricPrecision' />"
+      :water -> "<rect x='#{x}' y='#{y}' width='1' height='1' fill='#005377' shape-rendering='geometricPrecision' />"
+      :crate ->  ""
       :portal ->  ""
-      :coin ->  "/images/gold.png"
+      :coin -> "<circle cx='#{x}' cy='#{y}' r='0.5' fill='#f1a208' shape-rendering='geometricPrecision' />"
       :trap ->  ""
       :spawn ->  ""
     end
@@ -45,17 +41,17 @@ defmodule LiveBuggiesWeb.LiveWorld do
 
   def render(assigns) do
     {mw, mh} = get_world_dimensions(assigns.game.world)
-    #IO.inspect(assigns, label: "ASSIGN")
     ~L"""
     <div class="map-container">
       <svg
-        viewBox="0 0 <%= mw + 1 %> <%= mh + 1 %>"
+        viewBox="0 0 <%= mw %> <%= mh %>"
         xmlns="http://www.w3.org/2000/svg"
         version="1.1"
         class="map"
       >
+      <rect x="0" y="0" width="<%= mw %>" height="<%= mh %>" fill="gray" shape-rendering='optimizeSpeed' />
       <%= for {{x, y}, cell} <- @game.world do %>
-        <image href="<%= tile_to_img(cell) %>" x="<%= x %>" y="<%= y %>" height="1" width="1"/>
+        <%= raw tile_to_svg(cell, x, y) %>
       <% end %>
       </svg>
     </div>

@@ -1,10 +1,14 @@
 .map-container {
-  background-color: gray;
+  /*background-color: gray;*/
 }
 
 svg.map {
   width: 100%;
   height: auto;
-  background-color: transparent;
+  /*background-color: transparent;*/
   max-height: 100vh;
+}
+
+image {
+  image-rendering: pixelated;
 }

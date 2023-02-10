@@ -42,7 +42,7 @@ defmodule CreateWorlds do
         :spawn
 
       c ->
-        IO.inspect(char)
+        IO.inspect(char, label: "TILE")
         :error
     end
   end
