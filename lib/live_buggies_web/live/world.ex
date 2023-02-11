@@ -2,10 +2,20 @@ defmodule LiveBuggiesWeb.LiveWorld do
   use Phoenix.LiveView
   use Phoenix.HTML
 
-  def mount(%{"world_id" => world_id} = _session, _params, socket) do
-    Registry.register(:liveview_world_lookup, world_id, nil)
-    game = LiveBuggies.GameManager.info(game_id: world_id)
-    LiveBuggiesWeb.Endpoint.subscribe(world_id)
+  def mount(%{"game_id" => "random"} = session, params, socket) do
+    with [game_id | _games] <- LiveBuggies.GameManager.list_games(),
+         session <- Map.replace(session, "game_id", game_id),
+         {:ok, socket} <- mount(session, params, socket) do
+      {:ok, socket}
+    else
+      _ -> {:ok, assign(socket, :game, %Game{})}
+    end
+  end
+
+  def mount(%{"game_id" => game_id} = _session, _params, socket) do
+    Registry.register(:liveview_world_lookup, game_id, nil)
+    game = LiveBuggies.GameManager.info(game_id: game_id)
+    LiveBuggiesWeb.Endpoint.subscribe(game_id)
     {:ok, assign(socket, :game, game)}
   end
 
@@ -13,21 +23,24 @@ defmodule LiveBuggiesWeb.LiveWorld do
     {:noreply, assign(socket, game: msg.payload.val)}
   end
 
-  def inc(pid, world_id) do
-    GenServer.cast(pid, world_id)
-  end
+  #def inc(pid, world_id) do
+    #GenServer.cast(pid, world_id)
+  #end
 
-  def update_world(world_id: world_id, game: %Game{} = game) do
-    LiveBuggiesWeb.Endpoint.broadcast_from(self(), world_id, "update_world", game: game)
+  def update_world(game_id: game_id, game: %Game{} = game) do
+    LiveBuggiesWeb.Endpoint.broadcast_from(self(), game_id, "update_world", game: game)
   end
 
   defp get_world_dimensions(world) do
-    {mw, mh} = Enum.reduce(world, {0, 0}, fn {{x, y}, _val}, {mw, mh} -> {max(mw, x), max(mh, y)} end)
+    {mw, mh} =
+      Enum.reduce(world, {0, 0}, fn {{x, y}, _val}, {mw, mh} -> {max(mw, x), max(mh, y)} end)
+
     {mw + 1, mh + 1}
   end
 
   def render(assigns) do
     {mw, mh} = get_world_dimensions(assigns.game.world)
+
     ~L"""
     <div class="map-container">
       <svg

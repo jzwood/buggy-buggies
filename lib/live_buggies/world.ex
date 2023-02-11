@@ -33,7 +33,7 @@ defmodule Game do
 end
 
 defmodule Player do
-  defstruct handle: nil, purse: 0, x: nil, y: nil
+  defstruct handle: nil, purse: 0, crashes: 0, x: nil, y: nil
 end
 
 defmodule World do

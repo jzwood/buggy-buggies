@@ -3,7 +3,6 @@ defmodule LiveBuggies.GameManager do
 
   @init_state %State{}
   @worlds CreateWorlds.get_ascii_worlds() |> CreateWorlds.create_worlds() |> Enum.reverse()
-  @world_list_topic "worlds"
 
   # Public API
   def start_link(_args) do
@@ -11,7 +10,6 @@ defmodule LiveBuggies.GameManager do
   end
 
   # return %{game_id: uuid, secret: uuid}
-  # pass in world_id at some point
   def host(handle: handle) do
     GenServer.call(__MODULE__, {:host, handle})
   end
@@ -29,8 +27,8 @@ defmodule LiveBuggies.GameManager do
     GenServer.call(__MODULE__, {:info, game_id})
   end
 
-  def list_worlds() do
-    GenServer.call(__MODULE__, :list_worlds)
+  def list_games() do
+    GenServer.call(__MODULE__, :list_games)
   end
 
   def move(game_id: game_id, secret: secret, move: move) do
@@ -53,7 +51,7 @@ defmodule LiveBuggies.GameManager do
       world: world,
       host_secret: secret,
       players: %{secret => %Player{handle: handle, x: 0, y: 0}}
-    } |> IO.inspect(label: "H1")
+    }
 
     state = State.upsert_game(state, game_id, game) |> IO.inspect(label: "HOST")
 
@@ -63,7 +61,7 @@ defmodule LiveBuggies.GameManager do
   end
 
   @impl true
-  def handle_call(:list_worlds, _from, state) do
+  def handle_call(:list_games, _from, state) do
     {:reply, Map.keys(state.games), state}
   end
 

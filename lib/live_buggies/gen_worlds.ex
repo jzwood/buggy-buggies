@@ -42,7 +42,7 @@ defmodule CreateWorlds do
         :spawn
 
       c ->
-        IO.inspect(char, label: "TILE")
+        IO.inspect(c, label: "TILE")
         :error
     end
   end
@@ -66,7 +66,7 @@ defmodule CreateWorlds do
     # maybe it's y?
     |> Enum.group_by(fn {{x, _}, _} -> x end)
     |> Enum.sort_by(&fst/1)
-    |> Enum.map_join("\n", fn {n, row} ->
+    |> Enum.map_join("\n", fn {_n, row} ->
       row
       |> Enum.sort_by(fn {{_, y}, _} -> y end)
       |> Enum.map(&snd/1)

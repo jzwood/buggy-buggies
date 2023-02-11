@@ -25,7 +25,7 @@ defmodule LiveBuggiesWeb.Router do
     pipe_through :browser
 
     live("/", LiveWorlds)
-    live("/world/:world_id", LiveWorld)
+    live("/game/:game_id", LiveWorld)
   end
 
   # Other scopes may use custom stacks.
