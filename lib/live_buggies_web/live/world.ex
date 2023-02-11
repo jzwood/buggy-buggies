@@ -26,19 +26,6 @@ defmodule LiveBuggiesWeb.LiveWorld do
     {mw + 1, mh + 1}
   end
 
-  defp tile_to_svg(tile, x, y) do
-    case tile do
-      :empty -> ""
-      :wall ->  "<rect x='#{x}' y='#{y}' width='1' height='1' fill='#CCC' shape-rendering='geometricPrecision' />"
-      :water -> "<rect x='#{x}' y='#{y}' width='1' height='1' fill='#005377' shape-rendering='geometricPrecision' />"
-      :crate ->  ""
-      :portal ->  ""
-      :coin -> "<circle cx='#{x}' cy='#{y}' r='0.5' fill='#f1a208' shape-rendering='geometricPrecision' />"
-      :trap ->  ""
-      :spawn ->  ""
-    end
-  end
-
   def render(assigns) do
     {mw, mh} = get_world_dimensions(assigns.game.world)
     ~L"""
@@ -51,7 +38,22 @@ defmodule LiveBuggiesWeb.LiveWorld do
       >
       <rect x="0" y="0" width="<%= mw %>" height="<%= mh %>" fill="gray" shape-rendering='optimizeSpeed' />
       <%= for {{x, y}, cell} <- @game.world do %>
-        <%= raw tile_to_svg(cell, x, y) %>
+        <%= if :wall == cell do %>
+          <rect x="<%= x %>" y="<%= y %>" width="1" height="1" fill="#CCC" shape-rendering="geometricPrecision" />
+        <% end %>
+        <%= if :water == cell do %>
+          <rect x="<%= x %>" y="<%= y %>" width="1" height="1" fill="#005377" shape-rendering="geometricPrecision" />
+        <% end %>
+        <%= if :coin == cell do %>
+          <circle cx="<%= x + 0.5 %>" cy="<%= y + 0.5 %>" r="0.5" fill="#F1A208" shape-rendering="geometricPrecision" />
+        <% end %>
+        <%= if :crate == cell do %>
+        <% end %>
+        <%= if :portal == cell do %>
+        <% end %>
+        <%= if :trap == cell do %>
+          <polygon points="<%= x %>,<%= y + 1 %> <%= x + 0.5 %>,<%= y %> <%= x + 1 %>,<%= y + 1 %>" />
+        <% end %>
       <% end %>
       </svg>
     </div>
