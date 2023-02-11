@@ -41,24 +41,112 @@ defmodule LiveBuggiesWeb.LiveWorld do
         <% cx = x + 0.5 %>
         <% cy = y + 0.5 %>
         <%= if :wall == cell do %>
-          <rect class="wall" x="<%= x %>" y="<%= y %>" width="1" height="1" fill="#CCC" shape-rendering="geometricPrecision" />
+        <rect
+          class="wall"
+          x="<%= x %>"
+          y="<%= y %>"
+          width="1"
+          height="1"
+          fill="#CCC"
+          shape-rendering="geometricPrecision"
+        />
         <% end %>
         <%= if :water == cell do %>
-          <rect class="water" x="<%= x %>" y="<%= y %>" width="1" height="1" fill="#005377" shape-rendering="geometricPrecision" />
+        <rect
+          class="water"
+          x="<%= x %>"
+          y="<%= y %>"
+          width="1"
+          height="1"
+          fill="#005377"
+          shape-rendering="geometricPrecision"
+        />
         <% end %>
         <%= if :coin == cell do %>
-          <circle class="coin" cx="<%= cx %>" cy="<%= cy %>" r="0.3" fill="#F1A208" style="transform-origin: <%= cx %>px <%= cy %>px" shape-rendering="geometricPrecision" />
+        <circle
+          class="coin"
+          cx="<%= cx %>"
+          cy="<%= cy %>"
+          r="0.375"
+          fill="#F1A208"
+          shape-rendering="geometricPrecision"
+        />
         <% end %>
         <%= if :crate == cell do %>
-          <rect class="crate" x="<%= x %>" y="<%= y + 0.25 %>" width="1" height="0.75" fill="#644432" shape-rendering="geometricPrecision" />
+          <rect
+            class="crate"
+            x="<%= x %>"
+            y="<%= y + 0.1 %>"
+            width="1"
+            height="0.8"
+            fill="#644432"
+            shape-rendering="geometricPrecision"
+          />
         <% end %>
         <%= if :portal == cell do %>
-        <ellipse class="portal" cx="<%= cx %>" cy="<%= cy %>" rx="0.4" ry="0.5" fill="#7D00C5" />
+          <ellipse
+            class="portal"
+            cx="<%= cx %>"
+            cy="<%= cy %>"
+            rx="0.4"
+            ry="0.5"
+            fill="#7D00C5"
+          />
         <% end %>
         <%= if :trap == cell do %>
-          <polygon class="trap" points="<%= x %>,<%= y + 1 %> <%= x + 0.5 %>,<%= y %> <%= x + 1 %>,<%= y + 1 %>" />
+          <polygon
+            class="trap"
+            points="<%= x %>,<%= y + 1 %> <%= x + 0.5 %>,<%= y %> <%= x + 1 %>,<%= y + 1 %>"
+          />
         <% end %>
       <% end %>
+      <g class="buggy-n">
+        <rect
+          class="crate"
+          x="13.25"
+          y="11"
+          width="0.5"
+          height="1"
+          fill="red"
+          shape-rendering="geometricPrecision"
+        />
+        <rect
+          class="crate"
+          x="13.05"
+          y="11.1"
+          width="0.2"
+          height="0.3"
+          fill="black"
+          shape-rendering="geometricPrecision"
+        />
+        <rect
+          class="crate"
+          x="13.75"
+          y="11.1"
+          width="0.2"
+          height="0.3"
+          fill="black"
+          shape-rendering="geometricPrecision"
+        />
+        <rect
+          class="crate"
+          x="13.05"
+          y="11.6"
+          width="0.2"
+          height="0.3"
+          fill="black"
+          shape-rendering="geometricPrecision"
+        />
+        <rect
+          class="crate"
+          x="13.75"
+          y="11.6"
+          width="0.2"
+          height="0.3"
+          fill="black"
+          shape-rendering="geometricPrecision"
+        />
+      </g>
       </svg>
     </div>
     """
