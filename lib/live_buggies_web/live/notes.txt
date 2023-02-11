@@ -1,0 +1,8 @@
+        <polygon class="trap"
+          fill="#FFC7EE"
+          points="
+          <%= cx %>,<%= cy - 0.5 %>
+          <%= cx + 0.5 %>,<%= cy %>
+          <%= cx %>,<%= cy + 0.5 %>
+          <%= cx - 0.5 %>,<%= cy %>" />
+

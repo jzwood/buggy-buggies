@@ -38,21 +38,25 @@ defmodule LiveBuggiesWeb.LiveWorld do
       >
       <rect x="0" y="0" width="<%= mw %>" height="<%= mh %>" fill="gray" shape-rendering='optimizeSpeed' />
       <%= for {{x, y}, cell} <- @game.world do %>
+        <% cx = x + 0.5 %>
+        <% cy = y + 0.5 %>
         <%= if :wall == cell do %>
-          <rect x="<%= x %>" y="<%= y %>" width="1" height="1" fill="#CCC" shape-rendering="geometricPrecision" />
+          <rect class="wall" x="<%= x %>" y="<%= y %>" width="1" height="1" fill="#CCC" shape-rendering="geometricPrecision" />
         <% end %>
         <%= if :water == cell do %>
-          <rect x="<%= x %>" y="<%= y %>" width="1" height="1" fill="#005377" shape-rendering="geometricPrecision" />
+          <rect class="water" x="<%= x %>" y="<%= y %>" width="1" height="1" fill="#005377" shape-rendering="geometricPrecision" />
         <% end %>
         <%= if :coin == cell do %>
-          <circle cx="<%= x + 0.5 %>" cy="<%= y + 0.5 %>" r="0.5" fill="#F1A208" shape-rendering="geometricPrecision" />
+          <circle class="coin" cx="<%= cx %>" cy="<%= cy %>" r="0.3" fill="#F1A208" style="transform-origin: <%= cx %>px <%= cy %>px" shape-rendering="geometricPrecision" />
         <% end %>
         <%= if :crate == cell do %>
+          <rect class="crate" x="<%= x %>" y="<%= y + 0.25 %>" width="1" height="0.75" fill="#644432" shape-rendering="geometricPrecision" />
         <% end %>
         <%= if :portal == cell do %>
+        <ellipse class="portal" cx="<%= cx %>" cy="<%= cy %>" rx="0.4" ry="0.5" fill="#7D00C5" />
         <% end %>
         <%= if :trap == cell do %>
-          <polygon points="<%= x %>,<%= y + 1 %> <%= x + 0.5 %>,<%= y %> <%= x + 1 %>,<%= y + 1 %>" />
+          <polygon class="trap" points="<%= x %>,<%= y + 1 %> <%= x + 0.5 %>,<%= y %> <%= x + 1 %>,<%= y + 1 %>" />
         <% end %>
       <% end %>
       </svg>
