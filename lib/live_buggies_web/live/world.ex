@@ -50,7 +50,7 @@ defmodule LiveBuggiesWeb.LiveWorld do
         version="1.1"
         class="map"
       >
-        <GameComponent.background width={mw} height={mh} />
+      <rect x="0" y="0" width={mw} height={mh} fill="gray" shape-rendering='optimizeSpeed' />
       <%= for {{x, y}, cell} <- @game.world do %>
         <GameComponent.tile cell={cell} x={x} y={y} />
       <% end %>

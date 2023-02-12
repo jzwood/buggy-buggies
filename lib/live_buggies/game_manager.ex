@@ -47,10 +47,11 @@ defmodule LiveBuggies.GameManager do
     world = hd(@worlds)
     secret = UUID.uuid4()
 
+    {x, y} = World.random_spawn(world)
     game = %Game{
       world: world,
       host_secret: secret,
-      players: %{secret => %Player{handle: handle, x: 0, y: 0}}
+      players: %{secret => %Player{handle: handle, x: x, y: y}}
     }
 
     state = State.upsert_game(state, game_id, game) |> IO.inspect(label: "HOST")
@@ -71,7 +72,8 @@ defmodule LiveBuggies.GameManager do
     with {:ok, game} <- State.fetch_game(state, game_id) do
       secret = UUID.uuid4()
 
-      new_game = Game.upsert_player(game, secret, %Player{handle: handle, x: 0, y: 0})
+      {x, y} = World.random_spawn(game.world)
+      new_game = Game.upsert_player(game, secret, %Player{handle: handle, x: x, y: y})
 
       new_state = State.upsert_game(state, game_id, new_game)
       {:reply, {:ok, secret}, new_state}

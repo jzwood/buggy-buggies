@@ -33,7 +33,7 @@ defmodule Game do
 end
 
 defmodule Player do
-  defstruct handle: nil, purse: 0, crashes: 0, x: nil, y: nil, history: []
+  defstruct handle: nil, purse: 0, crashes: 0, x: nil, y: nil, history: [], shield: false, stealth: 0
 end
 
 defmodule World do
@@ -50,6 +50,9 @@ defmodule World do
 
       :spawn ->
         {:ok, world, %Player{player | x: x, y: y}}
+
+      :crate ->
+        {:ok, world, %Player{player | x: x, y: y}}  # eh, nothing with crates yet
 
       :coin ->
         world = Map.replace(world, {x, y}, :empty)
@@ -73,6 +76,16 @@ defmodule World do
       "W" -> {:ok, {0, -1}}
       _ -> {:error, "unknown direction"}
     end
+  end
+
+  def random_spawn(world) do
+    world
+    |> Map.filter(fn
+      {_k, :spawn} -> true
+      {_k, _v} -> false
+    end)
+    |> Map.keys()
+    |> Enum.random()
   end
 
   def next_world(world: world, player: player, move: direction) do
