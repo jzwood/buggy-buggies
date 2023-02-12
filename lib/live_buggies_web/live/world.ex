@@ -1,6 +1,7 @@
 defmodule LiveBuggiesWeb.LiveWorld do
   use Phoenix.LiveView
   use Phoenix.HTML
+  alias LiveBuggiesWeb.GameComponent
 
   def mount(%{"game_id" => "random"} = session, params, socket) do
     with [game_id | _games] <- LiveBuggies.GameManager.list_games(),
@@ -23,9 +24,9 @@ defmodule LiveBuggiesWeb.LiveWorld do
     {:noreply, assign(socket, game: msg.payload.val)}
   end
 
-  #def inc(pid, world_id) do
-    #GenServer.cast(pid, world_id)
-  #end
+  # def inc(pid, world_id) do
+  # GenServer.cast(pid, world_id)
+  # end
 
   def update_world(game_id: game_id, game: %Game{} = game) do
     LiveBuggiesWeb.Endpoint.broadcast_from(self(), game_id, "update_world", game: game)
@@ -41,125 +42,21 @@ defmodule LiveBuggiesWeb.LiveWorld do
   def render(assigns) do
     {mw, mh} = get_world_dimensions(assigns.game.world)
 
-    ~L"""
+    ~H"""
     <div class="map-container">
       <svg
-        viewBox="0 0 <%= mw %> <%= mh %>"
+        viewBox={"0 0 #{mw} #{mh}"}
         xmlns="http://www.w3.org/2000/svg"
         version="1.1"
         class="map"
       >
-      <rect x="0" y="0" width="<%= mw %>" height="<%= mh %>" fill="gray" shape-rendering='optimizeSpeed' />
+        <GameComponent.background width={mw} height={mh} />
       <%= for {{x, y}, cell} <- @game.world do %>
-        <% cx = x + 0.5 %>
-        <% cy = y + 0.5 %>
-        <%= if :wall == cell do %>
-        <rect
-          class="wall"
-          x="<%= x %>"
-          y="<%= y %>"
-          width="1"
-          height="1"
-          fill="#CCC"
-          shape-rendering="geometricPrecision"
-        />
-        <% end %>
-        <%= if :water == cell do %>
-        <rect
-          class="water"
-          x="<%= x %>"
-          y="<%= y %>"
-          width="1"
-          height="1"
-          fill="#005377"
-          shape-rendering="geometricPrecision"
-        />
-        <% end %>
-        <%= if :coin == cell do %>
-        <circle
-          class="coin"
-          cx="<%= cx %>"
-          cy="<%= cy %>"
-          r="0.375"
-          fill="#F1A208"
-          shape-rendering="geometricPrecision"
-        />
-        <% end %>
-        <%= if :crate == cell do %>
-          <rect
-            class="crate"
-            x="<%= x %>"
-            y="<%= y + 0.1 %>"
-            width="1"
-            height="0.8"
-            fill="#644432"
-            shape-rendering="geometricPrecision"
-          />
-        <% end %>
-        <%= if :portal == cell do %>
-          <ellipse
-            class="portal"
-            cx="<%= cx %>"
-            cy="<%= cy %>"
-            rx="0.4"
-            ry="0.5"
-            fill="#7D00C5"
-          />
-        <% end %>
-        <%= if :trap == cell do %>
-          <polygon
-            class="trap"
-            points="<%= x %>,<%= y + 1 %> <%= x + 0.5 %>,<%= y %> <%= x + 1 %>,<%= y + 1 %>"
-          />
-        <% end %>
+        <GameComponent.tile cell={cell} x={x} y={y} />
       <% end %>
-      <g class="buggy-n">
-        <rect
-          class="crate"
-          x="13.25"
-          y="11"
-          width="0.5"
-          height="1"
-          fill="red"
-          shape-rendering="geometricPrecision"
-        />
-        <rect
-          class="crate"
-          x="13.05"
-          y="11.1"
-          width="0.2"
-          height="0.3"
-          fill="black"
-          shape-rendering="geometricPrecision"
-        />
-        <rect
-          class="crate"
-          x="13.75"
-          y="11.1"
-          width="0.2"
-          height="0.3"
-          fill="black"
-          shape-rendering="geometricPrecision"
-        />
-        <rect
-          class="crate"
-          x="13.05"
-          y="11.6"
-          width="0.2"
-          height="0.3"
-          fill="black"
-          shape-rendering="geometricPrecision"
-        />
-        <rect
-          class="crate"
-          x="13.75"
-          y="11.6"
-          width="0.2"
-          height="0.3"
-          fill="black"
-          shape-rendering="geometricPrecision"
-        />
-      </g>
+      <%= for player <- Map.values(@game.players) do %>
+        <GameComponent.player x={player.x} y={player.y} history={player.history} />
+      <% end %>
       </svg>
     </div>
     """

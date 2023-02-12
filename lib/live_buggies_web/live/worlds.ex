@@ -24,13 +24,13 @@ defmodule LiveBuggiesWeb.LiveWorlds do
   end
 
   def render(assigns) do
-    ~L"""
+    ~H"""
     <div>
       <h1>Worlds</h1>
       <ul>
         <%= for game_id <- @games do %>
           <li>
-            <a data-phx-link="redirect" data-phx-link-state="push" href="/game/<%= game_id %>">
+            <a data-phx-link="redirect" data-phx-link-state="push" href={"/game/#{ game_id }"}>
               <%= game_id %>
             </a>
           </li>
