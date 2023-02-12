@@ -96,50 +96,53 @@
       """
     end
 
-
     def player(assigns) do
       ~H"""
-      <g class="buggy-n">
+      <g
+      class="buggy"
+      transform-origin={"#{@x + 0.5}px #{@y + 0.5}px"}
+      style="transform: rotate(90deg);"
+      >
         <rect
-          class="crate"
-          x="13.25"
-          y="11"
+          class="buggy"
+          x={@x + 0.25}
+          y={@y}
           width="0.5"
           height="1"
           fill="red"
           shape-rendering="geometricPrecision"
         />
         <rect
-          class="crate"
-          x="13.05"
-          y="11.1"
+          class="buggy"
+          x={@x + 0.05}
+          y={@y + 0.1}
           width="0.2"
           height="0.3"
           fill="black"
           shape-rendering="geometricPrecision"
         />
         <rect
-          class="crate"
-          x="13.75"
-          y="11.1"
+          class="buggy"
+          x={@x + 0.75}
+          y={@y + 0.1}
           width="0.2"
           height="0.3"
           fill="black"
           shape-rendering="geometricPrecision"
         />
         <rect
-          class="crate"
-          x="13.05"
-          y="11.6"
+          class="buggy"
+          x={@x + 0.05}
+          y={@y + 0.6}
           width="0.2"
           height="0.3"
           fill="black"
           shape-rendering="geometricPrecision"
         />
         <rect
-          class="crate"
-          x="13.75"
-          y="11.6"
+          class="buggy"
+          x={@x + 0.75}
+          y={@y + 0.6}
           width="0.2"
           height="0.3"
           fill="black"
