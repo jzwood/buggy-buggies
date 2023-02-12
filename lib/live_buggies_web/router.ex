@@ -17,6 +17,7 @@ defmodule LiveBuggiesWeb.Router do
   scope "/api", LiveBuggiesWeb do
     pipe_through :api
 
+    get "/game/:game_id/player/:secret/move/:direction", MoveController, :move
     get "/inc/:world", CounterController, :incr
     # get "/:id/move/:direction", MoveController, :move
   end
