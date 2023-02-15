@@ -21,12 +21,9 @@ defmodule LiveBuggiesWeb.LiveWorld do
   end
 
   def handle_info(msg, socket) do
-    {:noreply, assign(socket, game: msg.payload.val)}
+    #IO.inspect(msg.payload, label: "PAYLOAD")
+    {:noreply, assign(socket, msg.payload)}
   end
-
-  # def inc(pid, world_id) do
-  # GenServer.cast(pid, world_id)
-  # end
 
   def update_world(game_id: game_id, game: %Game{} = game) do
     LiveBuggiesWeb.Endpoint.broadcast_from(self(), game_id, "update_world", game: game)
@@ -36,21 +33,21 @@ defmodule LiveBuggiesWeb.LiveWorld do
     {mw, mh} =
       Enum.reduce(world, {0, 0}, fn {{x, y}, _val}, {mw, mh} -> {max(mw, x), max(mh, y)} end)
 
-    {mw + 1, mh + 1}
+    %{mw: mw + 1, mh: mh + 1}
   end
 
   def render(assigns) do
-    {mw, mh} = get_world_dimensions(assigns.game.world)
+    assigns = assign(assigns, :dim, get_world_dimensions(assigns.game.world))
 
     ~H"""
     <div class="map-container">
       <svg
-        viewBox={"0 0 #{mw} #{mh}"}
+        viewBox={"0 0 #{@dim.mw} #{@dim.mh}"}
         xmlns="http://www.w3.org/2000/svg"
         version="1.1"
         class="map"
       >
-      <rect x="0" y="0" width={mw} height={mh} fill="gray" shape-rendering='optimizeSpeed' />
+      <rect x="0" y="0" width={@dim.mw} height={@dim.mh} fill="gray" shape-rendering='optimizeSpeed' />
       <%= for {{x, y}, cell} <- @game.world do %>
         <GameComponent.tile cell={cell} x={x} y={y} />
       <% end %>

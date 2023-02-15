@@ -1,5 +1,6 @@
 defmodule LiveBuggies.GameManager do
   use GenServer
+  alias LiveBuggiesWeb.{LiveWorld, LiveWorlds}
 
   @init_state %State{}
   @worlds CreateWorlds.get_ascii_worlds() |> CreateWorlds.create_worlds() |> Enum.reverse()
@@ -56,7 +57,7 @@ defmodule LiveBuggies.GameManager do
 
     state = State.upsert_game(state, game_id, game) |> IO.inspect(label: "HOST")
 
-    LiveBuggiesWeb.LiveWorlds.update_world_list(Map.keys(state.games))
+    LiveWorlds.update_world_list(Map.keys(state.games))
 
     {:reply, {:ok, %{game_id: game_id, secret: secret}}, state}
   end
@@ -107,7 +108,12 @@ defmodule LiveBuggies.GameManager do
     with {:ok, game} <- State.fetch_game(state, game_id),
          {:ok, player} <- Game.fetch_player(game, secret),
          {:ok, world, player} <- World.next_world(world: game.world, player: player, move: move) do
-      new_state = State.upsert_game(state, game_id, Game.upsert_world(game, world))
+      new_game = Game.upsert_world(game, world)
+      new_game = Game.upsert_player(new_game, secret, player)
+      new_state = State.upsert_game(state, game_id, new_game)
+
+      LiveWorld.update_world(game_id: game_id, game: new_game)
+
       {:reply, {:ok, world, player}, new_state}
     else
       err -> {:reply, err, state}
