@@ -8,3 +8,28 @@ svg.map {
   /*background-color: transparent;*/
   max-height: 100vh;
 }
+
+.portal {
+  fill: #8C00BF;
+}
+
+.trap {
+  fill: #33654A;
+}
+
+.coin {
+  fill: #F1A208;
+}
+
+.crate {
+  fill: #644432;
+}
+
+
+.water {
+  fill: #005377;
+}
+
+.wall {
+  fill: #CCC;
+}

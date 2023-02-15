@@ -49,14 +49,10 @@ defmodule CreateWorlds do
 
   defp from_ascii(ascii_world) do
     Regex.split(~r/\n/, ascii_world)
-    |> Enum.reverse()
-    |> Enum.map(&String.graphemes/1)
-    |> Enum.reduce([], fn ascii_list, rows ->
-      [
-        ascii_list
-        |> Enum.map(&char_to_tile/1)
-        | rows
-      ]
+    #|> Enum.reverse()
+    |> Enum.map(fn row ->
+      String.graphemes(row)
+      |> Enum.map(&char_to_tile/1)
     end)
   end
 
@@ -105,7 +101,7 @@ defmodule CreateWorlds do
 
   defp transform_world(world) do
     world
-    |> Enum.with_index(fn row, x -> row |> Enum.with_index(fn tile, y -> {{x, y}, tile} end) end)
+    |> Enum.with_index(fn row, y -> row |> Enum.with_index(fn tile, x -> {{x, y}, tile} end) end)
     |> Enum.concat()
     |> Enum.into(%{})
   end

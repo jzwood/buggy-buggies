@@ -21,7 +21,6 @@ defmodule LiveBuggiesWeb.GameComponent do
       y={ @y }
       width="1"
       height="1"
-      fill="#CCC"
       shape-rendering="geometricPrecision"
     />
     """
@@ -35,7 +34,6 @@ defmodule LiveBuggiesWeb.GameComponent do
       y={ @y }
       width="1"
       height="1"
-      fill="#005377"
       shape-rendering="geometricPrecision"
     />
     """
@@ -48,7 +46,6 @@ defmodule LiveBuggiesWeb.GameComponent do
       cx={ @x + 0.5 }
       cy={ @y + 0.5 }
       r="0.375"
-      fill="#F1A208"
       shape-rendering="geometricPrecision"
     />
     """
@@ -62,7 +59,6 @@ defmodule LiveBuggiesWeb.GameComponent do
       y={ @y + 0.1 }
       width="1"
       height="0.8"
-      fill="#644432"
       shape-rendering="geometricPrecision"
     />
     """
@@ -76,7 +72,6 @@ defmodule LiveBuggiesWeb.GameComponent do
       cy={ @y + 0.5 }
       rx="0.4"
       ry="0.5"
-      fill="#7D00C5"
     />
     """
   end
