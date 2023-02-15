@@ -21,7 +21,7 @@ defmodule LiveBuggiesWeb.LiveWorld do
   end
 
   def handle_info(msg, socket) do
-    #IO.inspect(msg.payload, label: "PAYLOAD")
+    # IO.inspect(msg.payload, label: "PAYLOAD")
     {:noreply, assign(socket, msg.payload)}
   end
 

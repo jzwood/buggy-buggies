@@ -49,7 +49,7 @@ defmodule CreateWorlds do
 
   defp from_ascii(ascii_world) do
     Regex.split(~r/\n/, ascii_world)
-    #|> Enum.reverse()
+    # |> Enum.reverse()
     |> Enum.map(fn row ->
       String.graphemes(row)
       |> Enum.map(&char_to_tile/1)

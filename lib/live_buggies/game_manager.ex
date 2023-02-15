@@ -49,6 +49,7 @@ defmodule LiveBuggies.GameManager do
     secret = UUID.uuid4()
 
     {x, y} = World.random_spawn(world)
+
     game = %Game{
       world: world,
       host_secret: secret,
@@ -59,7 +60,9 @@ defmodule LiveBuggies.GameManager do
 
     LiveWorlds.update_world_list(Map.keys(state.games))
 
-    {:reply, {:ok, %{game_id: game_id, secret: secret}}, state}
+    example = "curl -X GET http://localhost:4000/api/game/#{game_id}/player/#{secret}/move/N"
+
+    {:reply, {:ok, %{game_id: game_id, secret: secret, example: example}}, state}
   end
 
   @impl true

@@ -33,7 +33,14 @@ defmodule Game do
 end
 
 defmodule Player do
-  defstruct handle: nil, purse: 0, crashes: 0, x: nil, y: nil, history: [], shield: false, stealth: 0
+  defstruct handle: nil,
+            purse: 0,
+            crashes: 0,
+            x: nil,
+            y: nil,
+            history: [],
+            shield: false,
+            stealth: 0
 end
 
 defmodule World do
@@ -52,7 +59,8 @@ defmodule World do
         {:ok, world, %Player{player | x: x, y: y}}
 
       :crate ->
-        {:ok, world, %Player{player | x: x, y: y}}  # eh, nothing with crates yet
+        # eh, nothing with crates yet
+        {:ok, world, %Player{player | x: x, y: y}}
 
       :coin ->
         world = Map.replace(world, {x, y}, :empty)
@@ -70,10 +78,10 @@ defmodule World do
 
   defp parse_direction(direction) do
     case String.upcase(direction) do
-      "N" -> {:ok, {-1, 0}}
-      "S" -> {:ok, {1, 0}}
-      "E" -> {:ok, {0, 1}}
-      "W" -> {:ok, {0, -1}}
+      "W" -> {:ok, {-1, 0}}
+      "E" -> {:ok, {1, 0}}
+      "S" -> {:ok, {0, 1}}
+      "N" -> {:ok, {0, -1}}
       _ -> {:error, "unknown direction"}
     end
   end
