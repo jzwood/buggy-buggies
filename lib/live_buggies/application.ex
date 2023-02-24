@@ -12,9 +12,9 @@ defmodule LiveBuggies.Application do
       LiveBuggiesWeb.Telemetry,
       # Start the PubSub system
       {Phoenix.PubSub, name: LiveBuggies.PubSub},
-      LiveBuggies.GameManager,
-      {Registry, keys: :unique, name: :liveview_world_lookup},
+      {Registry, keys: :unique, name: :game_registry},
 
+      #{DynamicSupervisor, strategy: :one_for_one, name: :dswhatever},
       # Start the Endpoint (http/https)
       LiveBuggiesWeb.Endpoint
       # Start a worker by calling: LiveBuggies.Worker.start_link(arg)

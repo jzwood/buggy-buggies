@@ -5,34 +5,50 @@ defmodule LiveBuggies.GameManager do
   @init_state %State{}
   @worlds CreateWorlds.get_ascii_worlds() |> CreateWorlds.create_worlds() |> Enum.reverse()
 
-  # Public API
-  def start_link(_args) do
-    GenServer.start_link(__MODULE__, @init_state, name: __MODULE__)
+  def make_new_game(game_id) do
+    name = {:via, Registry, {:game_registry, game_id}}
+    GenServer.start(__MODULE__, game, name: name)
   end
 
-  # return %{game_id: uuid, secret: uuid}
-  def host(handle: handle) do
-    GenServer.call(__MODULE__, {:host, handle})
+  # Public API
+  def start_link(handle: handle) do
+    game_id = UUID.uuid4()
+    world = hd(@worlds)
+
+    secret = UUID.uuid4()
+
+    {x, y} = World.random_spawn(world)
+
+    game = %Game{
+      world: world,
+      host_secret: secret,
+      players: %{secret => %Player{handle: handle, x: x, y: y}}
+    }
+
+    #LiveWorlds.update_world_list(Map.keys(state.games))
+    #example = "curl -X GET http://localhost:4000/api/game/#{game_id}/player/#{secret}/move/N"
+
+    GenServer.start_link(__MODULE__, game, name: game_id)
   end
 
   # return %{secret: uuid, unix time game start}
-  def join(game_id: game_id, handle: handle) do
-    GenServer.call(__MODULE__, {:join, game_id, handle})
+  def join(handle: handle) do
+    GenServer.call(__MODULE__, {:join, handle})
   end
 
-  def start(game_id: game_id, secret: secret) do
-    GenServer.call(__MODULE__, {:start, game_id, secret})
+  def start_game(secret: secret) do
+    GenServer.call(__MODULE__, {:start, secret})
   end
 
-  def info(game_id: game_id) do
-    GenServer.call(__MODULE__, {:info, game_id})
+  def info() do
+    GenServer.call(__MODULE__, :info)
   end
 
   def list_games() do
     GenServer.call(__MODULE__, :list_games)
   end
 
-  def move(game_id: game_id, secret: secret, move: move) do
+  def move(secret: secret, move: move) do
     GenServer.call(__MODULE__, {:move, game_id, secret, move})
   end
 
@@ -44,25 +60,6 @@ defmodule LiveBuggies.GameManager do
 
   @impl true
   def handle_call({:host, handle}, _from, %State{} = state) do
-    game_id = UUID.uuid4()
-    world = hd(@worlds)
-    secret = UUID.uuid4()
-
-    {x, y} = World.random_spawn(world)
-
-    game = %Game{
-      world: world,
-      host_secret: secret,
-      players: %{secret => %Player{handle: handle, x: x, y: y}}
-    }
-
-    state = State.upsert_game(state, game_id, game) |> IO.inspect(label: "HOST")
-
-    LiveWorlds.update_world_list(Map.keys(state.games))
-
-    example = "curl -X GET http://localhost:4000/api/game/#{game_id}/player/#{secret}/move/N"
-
-    {:reply, {:ok, %{game_id: game_id, secret: secret, example: example}}, state}
   end
 
   @impl true
