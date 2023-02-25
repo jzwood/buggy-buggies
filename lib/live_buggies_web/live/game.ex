@@ -8,7 +8,7 @@ defmodule LiveBuggiesWeb.GameComponent do
       :coin -> ~H"<.coin x={@x} y={@y} />"
       :crate -> ~H"<.crate x={@x} y={@y} />"
       :portal -> ~H"<.portal x={@x} y={@y} />"
-      :trap -> ~H"<.trap x={@x} y={@y} />"
+      :tree -> ~H"<.tree x={@x} y={@y} />"
       _ -> ~H""
     end
   end
@@ -76,10 +76,10 @@ defmodule LiveBuggiesWeb.GameComponent do
     """
   end
 
-  defp trap(assigns) do
+  defp tree(assigns) do
     ~H"""
     <polygon
-      class="trap"
+      class="tree"
       points={"#{@x},#{@y + 1} #{@x + 0.5},#{@y} #{@x + 1},#{@y + 1}"}
     />
     """

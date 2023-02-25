@@ -18,6 +18,8 @@ defmodule LiveBuggiesWeb.Router do
     pipe_through :api
 
     get "/host/:handle", GameController, :host
+    get "/game/:game_id/join/:handle", GameController, :join
+    get "/game/:game_id/player/:secret/start", GameController, :start
     get "/game/:game_id/player/:secret/move/:direction", GameController, :move
   end
 

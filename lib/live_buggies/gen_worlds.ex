@@ -5,7 +5,7 @@ defmodule CreateWorlds do
   @crate "#"
   @portal "@"
   @coin "$"
-  @trap "*"
+  @tree "^"
   @spawn "&"
 
   def fst({a, _}), do: a
@@ -35,8 +35,8 @@ defmodule CreateWorlds do
       @coin ->
         :coin
 
-      @trap ->
-        :trap
+      @tree ->
+        :tree
 
       @spawn ->
         :spawn
@@ -56,47 +56,15 @@ defmodule CreateWorlds do
     end)
   end
 
-  def to_ascii(world) do
-    world
-    |> Map.to_list()
-    # maybe it's y?
-    |> Enum.group_by(fn {{x, _}, _} -> x end)
-    |> Enum.sort_by(&fst/1)
-    |> Enum.map_join("\n", fn {_n, row} ->
-      row
-      |> Enum.sort_by(fn {{_, y}, _} -> y end)
-      |> Enum.map(&snd/1)
-      |> Enum.map(&tile_to_ascii/1)
-    end)
-  end
+  def get_player_game(%Game{} = game, %Player{} = player) do
+    world = Map.new(game.world, fn {{x, y}, tile} -> {"#{x},#{y}", tile} end)
 
-  defp tile_to_ascii(type) when is_atom(type) do
-    case type do
-      :empty ->
-        @empty
+    players =
+      Map.new(game.players, fn {_secret, %Player{handle: handle, x: x, y: y}} ->
+        {handle, %{x: x, y: y}}
+      end)
 
-      :wall ->
-        @wall
-
-      :water ->
-        @water
-
-      :crate ->
-        @crate
-
-      :portal ->
-        @portal
-
-      :coin ->
-        @coin
-
-      :spawn ->
-        @spawn
-
-      _ ->
-        IO.inspect(type)
-        :error
-    end
+    %{world: world, players: players, you: player}
   end
 
   defp transform_world(world) do

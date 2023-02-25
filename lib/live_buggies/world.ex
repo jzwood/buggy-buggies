@@ -1,12 +1,11 @@
 defmodule Player do
+  @derive {Jason.Encoder, only: [:handle, :purse, :booms, :x, :y]}
   defstruct handle: nil,
             purse: 0,
-            crashes: 0,
+            booms: 0,
             x: nil,
             y: nil,
-            history: [],
-            shield: false,
-            stealth: 0
+            history: []
 end
 
 defmodule Game do

@@ -51,6 +51,10 @@ defmodule LiveBuggies.GameManager do
     GenServer.call(get_name(game_id), {:move, secret, move})
   end
 
+  def game_over(game_id: game_id) do
+    GenServer.call(get_name(game_id), :game_over)
+  end
+
   # Callbacks
   @impl true
   def init(game) do
@@ -88,11 +92,17 @@ defmodule LiveBuggies.GameManager do
         |> Game.upsert_world(world)
         |> Game.upsert_player(secret, player)
 
+      player_game = CreateWorlds.get_player_game(game, player)
       LiveWorld.update_game(game: game)
 
-      {:reply, {:ok, world, player}, game}
+      {:reply, {:ok, player_game}, game}
     else
       err -> {:reply, err, game}
     end
+  end
+
+  @impl true
+  def handle_cast(:game_over, game) do
+    {:stop, :game_over, game}
   end
 end
