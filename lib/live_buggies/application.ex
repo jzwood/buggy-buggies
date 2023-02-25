@@ -14,7 +14,7 @@ defmodule LiveBuggies.Application do
       {Phoenix.PubSub, name: LiveBuggies.PubSub},
       {Registry, keys: :unique, name: :game_registry},
 
-      #{DynamicSupervisor, strategy: :one_for_one, name: :dswhatever},
+      # {DynamicSupervisor, strategy: :one_for_one, name: :dswhatever},
       # Start the Endpoint (http/https)
       LiveBuggiesWeb.Endpoint
       # Start a worker by calling: LiveBuggies.Worker.start_link(arg)

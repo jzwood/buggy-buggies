@@ -2,16 +2,19 @@ defmodule LiveBuggies.GameManager do
   use GenServer
   alias LiveBuggiesWeb.{LiveWorld, LiveWorlds}
 
-  @init_state %State{}
   @worlds CreateWorlds.get_ascii_worlds() |> CreateWorlds.create_worlds() |> Enum.reverse()
 
-  def make_new_game(game_id) do
-    name = {:via, Registry, {:game_registry, game_id}}
-    GenServer.start(__MODULE__, game, name: name)
+  def get_name(game_id) do
+    {:via, Registry, {:game_registry, game_id}}
   end
 
-  # Public API
-  def start_link(handle: handle) do
+  defp get_game(game_id) when is_binary(game_id) do
+    with [{pid, nil}] <- Registry.lookup(:game_registry, game_id) do
+      {:ok, pid}
+    end
+  end
+
+  def host(handle: handle) do
     game_id = UUID.uuid4()
     world = hd(@worlds)
 
@@ -25,30 +28,36 @@ defmodule LiveBuggies.GameManager do
       players: %{secret => %Player{handle: handle, x: x, y: y}}
     }
 
-    #LiveWorlds.update_world_list(Map.keys(state.games))
-    #example = "curl -X GET http://localhost:4000/api/game/#{game_id}/player/#{secret}/move/N"
+    # LiveWorlds.update_world_list(Map.keys(state.games))
+     example = "curl -X GET http://localhost:4000/api/game/#{game_id}/player/#{secret}/move/N"
 
-    GenServer.start_link(__MODULE__, game, name: game_id)
+    GenServer.start(__MODULE__, game, name: get_name(game_id))
+
+    %{game_id: game_id, secret: secret, example: example}
   end
 
   # return %{secret: uuid, unix time game start}
-  def join(handle: handle) do
-    GenServer.call(__MODULE__, {:join, handle})
+  def join(game_id: game_id, handle: handle) do
+    with {:ok, pid} <- get_game(game_id) do
+      GenServer.call(pid, {:join, game_id, handle})
+    end
   end
 
-  def start_game(secret: secret) do
-    GenServer.call(__MODULE__, {:start, secret})
+  def start_game(game_id: game_id, secret: secret) do
+    with {:ok, pid} <- get_game(game_id) do
+      GenServer.call(pid, {:start, game_id, secret})
+    end
   end
 
-  def info() do
-    GenServer.call(__MODULE__, :info)
+  def info(game_id) do
+    GenServer.call(get_name(game_id), :info)
   end
 
   def list_games() do
-    GenServer.call(__MODULE__, :list_games)
+    Registry.select(:game_registry, [{{:"$1", :_, :_}, [], [:"$1"]}])
   end
 
-  def move(secret: secret, move: move) do
+  def move(game_id: game_id, secret: secret, move: move) do
     GenServer.call(__MODULE__, {:move, game_id, secret, move})
   end
 
@@ -60,6 +69,25 @@ defmodule LiveBuggies.GameManager do
 
   @impl true
   def handle_call({:host, handle}, _from, %State{} = state) do
+    game_id = UUID.uuid4()
+    world = hd(@worlds)
+    secret = UUID.uuid4()
+
+    {x, y} = World.random_spawn(world)
+
+    game = %Game{
+      world: world,
+      host_secret: secret,
+      players: %{secret => %Player{handle: handle, x: x, y: y}}
+    }
+
+    state = State.upsert_game(state, game_id, game) |> IO.inspect(label: "HOST")
+
+    LiveWorlds.update_world_list(Map.keys(state.games))
+
+    example = "curl -X GET http://localhost:4000/api/game/#{game_id}/player/#{secret}/move/N"
+
+    {:reply, {:ok, %{game_id: game_id, secret: secret, example: example}}, state}
   end
 
   @impl true
@@ -95,12 +123,8 @@ defmodule LiveBuggies.GameManager do
   end
 
   @impl true
-  def handle_call({:info, game_id}, _from, %State{} = state) do
-    with {:ok, world} <- State.fetch_game(state, game_id) do
-      {:reply, world, state}
-    else
-      err -> {:reply, err, state}
-    end
+  def handle_call(:info, _from, game) do
+    {:reply, game, game}
   end
 
   @impl true
