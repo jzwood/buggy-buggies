@@ -1,20 +1,24 @@
-defmodule State do
-  defstruct games: %{}
-
-  def upsert_game(state, game_id, game) do
-    %State{state | games: Map.put(state.games, game_id, game)}
-  end
-
-  def fetch_game(state, game_id) do
-    Map.fetch(state.games, game_id)
-  end
+defmodule Player do
+  defstruct handle: nil,
+            purse: 0,
+            crashes: 0,
+            x: nil,
+            y: nil,
+            history: [],
+            shield: false,
+            stealth: 0
 end
 
 defmodule Game do
-  defstruct world: %{}, host_secret: "", players: %{}, open: false
+  defstruct id: nil, world: %{}, host_secret: "", players: %{}, open: false
 
   def fetch_player(game, player_secret) do
     Map.fetch(game.players, player_secret)
+  end
+
+  def add_player(%Game{} = game, handle: handle, secret: secret) do
+    {x, y} = World.random_spawn(game.world)
+    Game.upsert_player(game, secret, %Player{handle: handle, x: x, y: y})
   end
 
   def upsert_player(%Game{} = game, secret, player) do
@@ -30,17 +34,6 @@ defmodule Game do
   end
 
   def start(_), do: :error
-end
-
-defmodule Player do
-  defstruct handle: nil,
-            purse: 0,
-            crashes: 0,
-            x: nil,
-            y: nil,
-            history: [],
-            shield: false,
-            stealth: 0
 end
 
 defmodule World do

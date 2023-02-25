@@ -14,7 +14,6 @@ defmodule LiveBuggiesWeb.LiveWorld do
   end
 
   def mount(%{"game_id" => game_id} = _session, _params, socket) do
-    Registry.register(:liveview_world_lookup, game_id, nil)
     game = LiveBuggies.GameManager.info(game_id: game_id)
     LiveBuggiesWeb.Endpoint.subscribe(game_id)
     {:ok, assign(socket, :game, game)}
@@ -25,8 +24,8 @@ defmodule LiveBuggiesWeb.LiveWorld do
     {:noreply, assign(socket, msg.payload)}
   end
 
-  def update_world(game_id: game_id, game: %Game{} = game) do
-    LiveBuggiesWeb.Endpoint.broadcast_from(self(), game_id, "update_world", game: game)
+  def update_game(game: %Game{id: game_id} = game) do
+    LiveBuggiesWeb.Endpoint.broadcast_from(self(), game_id, "update_game", game: game)
   end
 
   defp get_world_dimensions(world) do

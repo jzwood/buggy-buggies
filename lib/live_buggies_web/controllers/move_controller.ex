@@ -1,4 +1,4 @@
-defmodule LiveBuggiesWeb.MoveController do
+defmodule LiveBuggiesWeb.GameController do
   use LiveBuggiesWeb, :controller
   alias LiveBuggies.GameManager
 
@@ -11,6 +11,13 @@ defmodule LiveBuggiesWeb.MoveController do
 
   def move(conn, _) do
     failure(conn, "bad input")
+  end
+
+  def host(conn, %{"handle" => handle}) do
+    case GameManager.host(handle: handle) do
+      {:ok, data} -> success(conn, data)
+      _ -> failure(conn, "failed")
+    end
   end
 
   defp success(conn, result) do
