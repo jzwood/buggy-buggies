@@ -85,12 +85,26 @@ defmodule LiveBuggiesWeb.GameComponent do
     """
   end
 
+  def tire_tracks(assigns) do
+    ~H"""
+      <polyline
+        class="tire-tracks"
+        points={@points}
+        fill="none"
+        stroke="dimgrey"
+        stroke-width="0.1"
+        stroke-linejoin="round"
+        stroke-linecap="round"
+      />
+    """
+  end
+
   def player(assigns) do
     ~H"""
     <g
     class="buggy"
     transform-origin={"#{@x + 0.5}px #{@y + 0.5}px"}
-    style="transform: rotate(90deg);"
+    style={"transform: rotate(#{@orientation}deg);"}
     >
       <rect
         class="buggy"

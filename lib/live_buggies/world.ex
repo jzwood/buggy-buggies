@@ -1,8 +1,8 @@
 defmodule Player do
-  @derive {Jason.Encoder, only: [:handle, :purse, :booms, :x, :y]}
+  @derive {Jason.Encoder, only: [:handle, :purse, :boom, :x, :y]}
   defstruct handle: nil,
             purse: 0,
-            booms: 0,
+            boom: false,
             x: nil,
             y: nil,
             history: []
@@ -17,7 +17,7 @@ defmodule Game do
 
   def add_player(%Game{} = game, handle: handle, secret: secret) do
     {x, y} = World.random_spawn(game.world)
-    Game.upsert_player(game, secret, %Player{handle: handle, x: x, y: y})
+    Game.upsert_player(game, secret, %Player{handle: handle, x: x, y: y, history: [{x, y}]})
   end
 
   def upsert_player(%Game{} = game, secret, player) do
@@ -36,7 +36,18 @@ defmodule Game do
 end
 
 defmodule World do
-  defp move(world, %Player{purse: purse, x: px, y: py} = player, {mx, my}) do
+  defp update_history([], {x, y}), do: [{x, y}]
+  defp update_history([{x, y} | _history] = history, {x, y}), do: history
+  defp update_history(history, {x, y}), do: [{x, y} | history]
+
+  defp update_position(%Player{history: history} = player, {x, y}) do
+    %Player{player | x: x, y: y, history: update_history(history, {x, y})}
+  end
+
+  defp increment_purse(%Player{purse: purse} = player), do: %Player{player | purse: purse + 1}
+  defp crash(%Player{boom: boom} = player), do: %Player{player | boom: true}
+
+  defp move(world, %Player{purse: purse, x: px, y: py, history: history} = player, {mx, my}) do
     x = px + mx
     y = py + my
 
@@ -45,26 +56,36 @@ defmodule World do
         {:error, "cannot leave map"}
 
       :empty ->
-        {:ok, world, %Player{player | x: x, y: y}}
+        {:ok, world, update_position(player, {x, y})}
 
       :spawn ->
-        {:ok, world, %Player{player | x: x, y: y}}
-
-      :crate ->
-        # eh, nothing with crates yet
-        {:ok, world, %Player{player | x: x, y: y}}
+        {:ok, world, update_position(player, {x, y})}
 
       :coin ->
         world = Map.replace(world, {x, y}, :empty)
-        player = %Player{player | x: x, y: y, purse: purse + 1}
+
+        player =
+          player
+          |> update_position({x, y})
+          |> increment_purse()
+
         # maybe payouts are randomly 1, 2, or 3
         {:ok, world, player}
+      #:portal ->
 
       :wall ->
         {:error, "cannot move through walls"}
 
       :water ->
-        {:error, "cannot cross water"}
+        {:ok, world, crash(player)}
+
+      :tree ->
+        {:ok, world, crash(player)}
+
+      :crate ->
+        # eh, nothing with crates yet
+        {:ok, world, update_position(player, {x, y})}
+
     end
   end
 

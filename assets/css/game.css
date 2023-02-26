@@ -1,3 +1,13 @@
+:root {
+  --turn-speed: 0.18s;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
 .map-container {
   /*background-color: gray;*/
 }
@@ -25,11 +35,14 @@ svg.map {
   fill: #644432;
 }
 
-
 .water {
   fill: #005377;
 }
 
 .wall {
   fill: #CCC;
+}
+
+.buggy {
+  transition: x var(--turn-speed), y var(--turn-speed), transform-origin var(--turn-speed);
 }
