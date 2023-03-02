@@ -87,9 +87,12 @@ defmodule LiveBuggiesWeb.GameComponent do
 
   def tire_tracks(assigns) do
     ~H"""
-      <polyline
+      <line
         class="tire-tracks"
-        points={@points}
+        x1={@x1}
+        y1={@y1}
+        x2={@x2}
+        y2={@y2}
         fill="none"
         stroke="dimgrey"
         stroke-width="0.1"

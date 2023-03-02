@@ -76,17 +76,32 @@ defmodule World do
 
       :portal ->
         position = random_portal(world, {x, y})
-        player = player |> update_position(position)
+
+        player =
+          player
+          |> update_position({x, y})
+          |> update_position(position)
+
         {:ok, world, player}
 
       :wall ->
         {:error, "cannot move through walls"}
 
       :water ->
-        {:ok, world, crash(player)}
+        player =
+          player
+          |> update_position({x, y})
+          |> crash()
+
+        {:ok, world, player}
 
       :tree ->
-        {:ok, world, crash(player)}
+        player =
+          player
+          |> update_position({x, y})
+          |> crash()
+
+        {:ok, world, player}
 
       :crate ->
         # eh, nothing with crates yet

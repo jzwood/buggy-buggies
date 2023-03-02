@@ -46,3 +46,7 @@ svg.map {
 .buggy {
   transition: x var(--turn-speed), y var(--turn-speed), transform-origin var(--turn-speed);
 }
+
+/*.tire-tracks {*/
+  /*transition: x1 var(--turn-speed), y1 var(--turn-speed), x2 var(--turn-speed), y2 var(--turn-speed)*/
+/*}*/

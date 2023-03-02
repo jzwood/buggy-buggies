@@ -41,13 +41,17 @@ defmodule LiveBuggiesWeb.LiveWorld do
   defp orientation_of(_), do: 90
 
   defp avg({x1, y1}, {x2, y2}), do: {0.5 * (x1 + x2), 0.5 * (y1 + y2)}
+  defp manhattan_distance({x1, y1}, {x2, y2}), do: abs(x2 - x1) + abs(y2 - y1)
 
   defp history_to_points([]), do: []
   defp history_to_points([_xy]), do: []
 
   defp history_to_points([p1, p2 | history]) do
-    [avg(p1, p2), p2 | history]
-    |> Enum.map_join(" ", fn {x, y} -> "#{x + 0.5},#{y + 0.5}" end)
+     #[avg(p1, p2), p2 | history]
+    [p1, p2 | history]
+    |> Enum.map(fn {x, y} -> {x + 0.5, y + 0.5} end)
+    |> Enum.chunk_every(2, 1, :discard)
+    |> Enum.filter(fn [p1, p2] -> manhattan_distance(p1, p2) == 1 end)
   end
 
   def render(assigns) do
@@ -62,9 +66,6 @@ defmodule LiveBuggiesWeb.LiveWorld do
         class="map"
       >
       <rect x="0" y="0" width={@dim.mw} height={@dim.mh} fill="gray" shape-rendering='optimizeSpeed' />
-      <%= for %{history: history} <- Map.values(@game.players) do %>
-        <GameComponent.tire_tracks points={history_to_points(history)} />
-      <% end %>
       <%= for {{x, y}, cell} <- @game.world do %>
         <GameComponent.tile cell={cell} x={x} y={y} />
       <% end %>
@@ -76,3 +77,11 @@ defmodule LiveBuggiesWeb.LiveWorld do
     """
   end
 end
+
+
+# TIRE TRACKS ARE A DISTRACTION
+#<%= for %{history: history} <- Map.values(@game.players) do %>
+  #<%= for [{x1, y1}, {x2, y2}] <- history_to_points(history) do %>
+    #<GameComponent.tire_tracks x1={x1} y1={y1} x2={x2} y2={y2} />
+  #<% end %>
+#<% end %>
