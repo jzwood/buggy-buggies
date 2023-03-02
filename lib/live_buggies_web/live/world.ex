@@ -44,6 +44,7 @@ defmodule LiveBuggiesWeb.LiveWorld do
 
   defp history_to_points([]), do: []
   defp history_to_points([_xy]), do: []
+
   defp history_to_points([p1, p2 | history]) do
     [avg(p1, p2), p2 | history]
     |> Enum.map_join(" ", fn {x, y} -> "#{x + 0.5},#{y + 0.5}" end)

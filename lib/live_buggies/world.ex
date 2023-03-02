@@ -45,9 +45,11 @@ defmodule World do
   end
 
   defp increment_purse(%Player{purse: purse} = player), do: %Player{player | purse: purse + 1}
-  defp crash(%Player{boom: boom} = player), do: %Player{player | boom: true}
+  defp crash(%Player{boom: _boom} = player), do: %Player{player | boom: true}
 
-  defp move(world, %Player{purse: purse, x: px, y: py, history: history} = player, {mx, my}) do
+  defp move(world, %Player{boom: true} = player, _m), do: {:ok, world, player}
+
+  defp move(world, %Player{x: px, y: py} = player, {mx, my}) do
     x = px + mx
     y = py + my
 
@@ -71,7 +73,11 @@ defmodule World do
 
         # maybe payouts are randomly 1, 2, or 3
         {:ok, world, player}
-      #:portal ->
+
+      :portal ->
+        position = random_portal(world, {x, y})
+        player = player |> update_position(position)
+        {:ok, world, player}
 
       :wall ->
         {:error, "cannot move through walls"}
@@ -85,7 +91,6 @@ defmodule World do
       :crate ->
         # eh, nothing with crates yet
         {:ok, world, update_position(player, {x, y})}
-
     end
   end
 
@@ -103,6 +108,17 @@ defmodule World do
     world
     |> Map.filter(fn
       {_k, :spawn} -> true
+      {_k, _v} -> false
+    end)
+    |> Map.keys()
+    |> Enum.random()
+  end
+
+  def random_portal(world, {_x, _y} = k) do
+    world
+    |> Map.filter(fn
+      {^k, :portal} -> false
+      {_k, :portal} -> true
       {_k, _v} -> false
     end)
     |> Map.keys()
