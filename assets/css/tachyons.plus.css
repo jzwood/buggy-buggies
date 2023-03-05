@@ -1,3 +1,6 @@
+.gh0 {
+  column-gap: 0;
+}
 .gh1 {
   column-gap: 0.25rem;
 }
@@ -13,7 +16,9 @@
 .gh5 {
   column-gap: 4rem;
 }
-
+.gv0 {
+  row-gap: 0;
+}
 .gv1 {
   row-gap: 0.25rem;
 }
@@ -28,6 +33,45 @@
 }
 .gv5 {
   row-gap: 4rem;
+}
+
+@media screen and (min-width: 30em) {
+  .gh0-m {
+    column-gap: 0;
+  }
+  .gh1-m {
+    column-gap: 0.25rem;
+  }
+  .gh2-m {
+    column-gap: 0.5rem;
+  }
+  .gh3-m {
+    column-gap: 1rem;
+  }
+  .gh4-m {
+    column-gap: 2rem;
+  }
+  .gh5-m {
+    column-gap: 4rem;
+  }
+  .gv0-m {
+    row-gap: 0;
+  }
+  .gv1-m {
+    row-gap: 0.25rem;
+  }
+  .gv2-m {
+    row-gap: 0.5rem;
+  }
+  .gv3-m {
+    row-gap: 1rem;
+  }
+  .gv4-m {
+    row-gap: 2rem;
+  }
+  .gv5-m {
+    row-gap: 4rem;
+  }
 }
 
 .break-spaces {
