@@ -1,0 +1,39 @@
+.gh1 {
+  column-gap: 0.25rem;
+}
+.gh2 {
+  column-gap: 0.5rem;
+}
+.gh3 {
+  column-gap: 1rem;
+}
+.gh4 {
+  column-gap: 2rem;
+}
+.gh5 {
+  column-gap: 4rem;
+}
+
+.gv1 {
+  row-gap: 0.25rem;
+}
+.gv2 {
+  row-gap: 0.5rem;
+}
+.gv3 {
+  row-gap: 1rem;
+}
+.gv4 {
+  row-gap: 2rem;
+}
+.gv5 {
+  row-gap: 4rem;
+}
+
+.break-spaces {
+  white-space: break-spaces;
+}
+
+.cursive {
+  font-family: cursive;
+}

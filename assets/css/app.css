@@ -1,6 +1,8 @@
 /* This file is for your main application CSS */
 @import "./reset.css";
 @import "./game.css";
+@import "./tachyons.min.css";
+@import "./tachyons.plus.css";
 
 /* Alerts and form errors used by phx.new */
 .alert {

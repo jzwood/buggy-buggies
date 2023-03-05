@@ -1,4 +1,39 @@
-html, body {
-  margin: 0;
-  padding: 0;
+*, *::before, *::after {
+  box-sizing: border-box;
 }
+
+* {
+  margin: 0;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  font-family: Georgia, serif;
+}
+
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+ul, ol {
+  padding-left: 1.5rem;
+}
+
+p, li, span {
+  font-size: large;
+}
+
+h2 {
+  font-size: xx-large;
+}
+
+/*h1, h2, h3 {*/
+  /*font-family: courier new, monospace;*/
+/*}*/

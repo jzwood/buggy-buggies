@@ -2,10 +2,10 @@
   --turn-speed: 0.18s;
 }
 
-html, body {
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
+.home {
+  padding-left: 1rem;
+  padding-right: 1rem;
+
 }
 
 .map-container {
@@ -20,27 +20,39 @@ svg.map {
 }
 
 .portal {
-  fill: #8C00BF;
+  --color: #8C00BF;
+  fill: var(--color);
+  color: var(--color);
 }
 
 .tree {
-  fill: #33654A;
+  --color: #33654A;
+  fill: var(--color);
+  color: var(--color);
 }
 
 .coin {
-  fill: #F1A208;
+  --color: #F1A208;
+  fill: var(--color);
+  color: var(--color);
 }
 
 .crate {
-  fill: #644432;
+  --color: #644432;
+  fill: var(--color);
+  color: var(--color);
 }
 
 .water {
-  fill: #005377;
+  --color: #005377;
+  fill: var(--color);
+  color: var(--color);
 }
 
 .wall {
-  fill: #CCC;
+  --color: #CCC;
+  fill: var(--color);
+  color: var(--color);
 }
 
 .buggy {
