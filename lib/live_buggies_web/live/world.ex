@@ -47,7 +47,7 @@ defmodule LiveBuggiesWeb.LiveWorld do
   defp history_to_points([_xy]), do: []
 
   defp history_to_points([p1, p2 | history]) do
-     #[avg(p1, p2), p2 | history]
+    # [avg(p1, p2), p2 | history]
     [p1, p2 | history]
     |> Enum.map(fn {x, y} -> {x + 0.5, y + 0.5} end)
     |> Enum.chunk_every(2, 1, :discard)
@@ -78,10 +78,9 @@ defmodule LiveBuggiesWeb.LiveWorld do
   end
 end
 
-
 # TIRE TRACKS ARE A DISTRACTION
-#<%= for %{history: history} <- Map.values(@game.players) do %>
-  #<%= for [{x1, y1}, {x2, y2}] <- history_to_points(history) do %>
-    #<GameComponent.tire_tracks x1={x1} y1={y1} x2={x2} y2={y2} />
-  #<% end %>
-#<% end %>
+# <%= for %{history: history} <- Map.values(@game.players) do %>
+# <%= for [{x1, y1}, {x2, y2}] <- history_to_points(history) do %>
+# <GameComponent.tire_tracks x1={x1} y1={y1} x2={x2} y2={y2} />
+# <% end %>
+# <% end %>

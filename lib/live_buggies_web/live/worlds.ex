@@ -58,6 +58,9 @@ defmodule LiveBuggiesWeb.LiveWorlds do
           <p>first buggy to collect 20 gold wins.</p>
         </div>
         <h2>spectate</h2>
+        <%= if length(@games) == 0 do %>
+          <i>no in progress games</i>
+        <% end %>
         <ol>
           <%= for game_id <- @games do %>
             <li>

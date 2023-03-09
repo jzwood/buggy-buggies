@@ -4,8 +4,14 @@ defmodule LiveBuggies.GameManager do
 
   @worlds CreateWorlds.get_ascii_worlds() |> CreateWorlds.create_worlds() |> Enum.reverse()
 
-  defp get_name(game_id) do
-    {:via, Registry, {:game_registry, game_id}}
+  defp get_name(game_id), do: {:via, Registry, {:game_registry, game_id}}
+
+  defp genserver_call(game_id, args) do
+    name = get_name(game_id)
+    case GenServer.whereis(name) do
+      nil -> :error
+      _ -> GenServer.call(name, args)
+    end
   end
 
   def host(handle: handle) do
@@ -32,15 +38,15 @@ defmodule LiveBuggies.GameManager do
 
   # return %{secret: uuid, unix time game start}
   def join(game_id: game_id, handle: handle) do
-    GenServer.call(get_name(game_id), {:join, handle})
+    genserver_call(game_id, {:join, handle})
   end
 
   def start_game(game_id: game_id, secret: secret) do
-    GenServer.call(get_name(game_id), {:start_game, secret})
+    genserver_call(game_id, {:start_game, secret})
   end
 
   def info(game_id: game_id) do
-    GenServer.call(get_name(game_id), :info)
+    genserver_call(game_id, :info)
   end
 
   def list_games() do
@@ -48,11 +54,11 @@ defmodule LiveBuggies.GameManager do
   end
 
   def move(game_id: game_id, secret: secret, move: move) do
-    GenServer.call(get_name(game_id), {:move, secret, move})
+    genserver_call(game_id, {:move, secret, move})
   end
 
   def game_over(game_id: game_id) do
-    GenServer.call(get_name(game_id), :game_over)
+    genserver_call(game_id, :game_over)
   end
 
   # Callbacks
