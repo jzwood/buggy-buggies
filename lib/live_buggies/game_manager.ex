@@ -45,8 +45,8 @@ defmodule LiveBuggies.GameManager do
     genserver_call(game_id, {:start_game, secret})
   end
 
-  def info(game_id: game_id) do
-    genserver_call(game_id, :info)
+  def debug(game_id: game_id) do
+    genserver_call(game_id, :debug)
   end
 
   def list_games() do
@@ -55,6 +55,10 @@ defmodule LiveBuggies.GameManager do
 
   def move(game_id: game_id, secret: secret, move: move) do
     genserver_call(game_id, {:move, secret, move})
+  end
+
+  def info(game_id: game_id, secret: secret) do
+    genserver_call(game_id, {:info, secret})
   end
 
   def game_over(game_id: game_id) do
@@ -76,16 +80,7 @@ defmodule LiveBuggies.GameManager do
   end
 
   @impl true
-  def handle_call({:start_game, secret}, _from, %Game{} = game) do
-    with {:ok, game} <- Game.start(game, secret) do
-      {:reply, :ok, game}
-    else
-      err -> {:reply, err, game}
-    end
-  end
-
-  @impl true
-  def handle_call(:info, _from, game) do
+  def handle_call(:debug, _from, game) do
     {:reply, game, game}
   end
 
@@ -101,6 +96,16 @@ defmodule LiveBuggies.GameManager do
       player_game = CreateWorlds.get_player_game(game, player)
       LiveWorld.update_game(game: game)
 
+      {:reply, {:ok, player_game}, game}
+    else
+      err -> {:reply, err, game}
+    end
+  end
+
+  @impl true
+  def handle_call({:info, secret}, _from, %Game{} = game) do
+    with {:ok, player} <- Game.fetch_player(game, secret) do
+      player_game = CreateWorlds.get_player_game(game, player)
       {:reply, {:ok, player_game}, game}
     else
       err -> {:reply, err, game}

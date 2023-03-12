@@ -47,6 +47,7 @@ svg.map {
   --color: #CCC;
   fill: var(--color);
   color: var(--color);
+  stroke: 1px black;
 }
 
 .buggy {
@@ -56,3 +57,22 @@ svg.map {
 /*.tire-tracks {*/
   /*transition: x1 var(--turn-speed), y1 var(--turn-speed), x2 var(--turn-speed), y2 var(--turn-speed)*/
 /*}*/
+
+main.worlds {
+ display: grid;
+ grid-template-columns: auto auto;
+}
+
+main.worlds h2 {
+  justify-self: end;
+}
+
+@media (max-width: 40rem) {
+  main.worlds {
+    grid-template-columns: auto;
+  }
+
+  main.worlds h2 {
+    justify-self: start;
+  }
+}

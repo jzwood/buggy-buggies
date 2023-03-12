@@ -14,7 +14,7 @@ defmodule LiveBuggiesWeb.LiveWorld do
   end
 
   def mount(%{"game_id" => game_id} = _session, _params, socket) do
-    game = LiveBuggies.GameManager.info(game_id: game_id)
+    game = LiveBuggies.GameManager.debug(game_id: game_id)
     LiveBuggiesWeb.Endpoint.subscribe(game_id)
     {:ok, assign(socket, :game, game)}
   end
