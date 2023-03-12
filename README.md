@@ -16,3 +16,14 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
   * Docs: https://hexdocs.pm/phoenix
   * Forum: https://elixirforum.com/c/phoenix-forum
   * Source: https://github.com/phoenixframework/phoenix
+
+# TODO
+    make gold spawn after it is consumed
+    implement kill game
+    enforce rate limit
+    show player scores
+    rename modules
+    deploy
+    update readme
+    tire tracks?
+
