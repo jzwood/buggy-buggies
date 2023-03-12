@@ -28,11 +28,11 @@ defmodule Game do
     %Game{game | world: world}
   end
 
-  #def start(%Game{host_secret: host_secret, open: false} = game, host_secret) do
-    #{:ok, %{game | open: true}}
-  #end
+  # def start(%Game{host_secret: host_secret, open: false} = game, host_secret) do
+  # {:ok, %{game | open: true}}
+  # end
 
-  #def start(_), do: :error
+  # def start(_), do: :error
 end
 
 defmodule World do

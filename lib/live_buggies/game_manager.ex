@@ -8,6 +8,7 @@ defmodule LiveBuggies.GameManager do
 
   defp genserver_call(game_id, args) do
     name = get_name(game_id)
+
     case GenServer.whereis(name) do
       nil -> :error
       _ -> GenServer.call(name, args)
