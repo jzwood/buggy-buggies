@@ -34,7 +34,7 @@ defmodule LiveBuggiesWeb.LiveWorlds do
         <h2>host</h2>
         <pre class="break-spaces">GET /api/host/&lt;handle&gt;</pre>
         <h2>friends join</h2>
-        <pre class="break-spaces">GET /game/&lt;game_id&gt;/join/&lt;handle&gt;</pre>
+        <pre class="break-spaces">GET /api/game/&lt;game_id&gt;/join/&lt;handle&gt;</pre>
         <h2>game loop</h2>
         <p>collect gold. avoid crashing.</p>
         <h2>move<sup>†</sup></h2>
