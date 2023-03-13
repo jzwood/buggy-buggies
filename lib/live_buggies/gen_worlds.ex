@@ -6,7 +6,6 @@ defmodule CreateWorlds do
   @portal "@"
   @coin "$"
   @tree "^"
-  @spawn "&"
 
   def fst({a, _}), do: a
   def snd({_, b}), do: b
@@ -37,9 +36,6 @@ defmodule CreateWorlds do
 
       @tree ->
         :tree
-
-      @spawn ->
-        :spawn
 
       c ->
         IO.inspect(c, label: "TILE")

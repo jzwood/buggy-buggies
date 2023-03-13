@@ -16,7 +16,7 @@ defmodule Game do
   end
 
   def add_player(%Game{} = game, handle: handle, secret: secret) do
-    {x, y} = World.random_spawn(game.world)
+    {x, y} = World.random_empty(game.world)
     Game.upsert_player(game, secret, %Player{handle: handle, x: x, y: y, history: [{x, y}]})
   end
 
@@ -60,11 +60,11 @@ defmodule World do
       :empty ->
         {:ok, world, update_position(player, {x, y})}
 
-      :spawn ->
-        {:ok, world, update_position(player, {x, y})}
-
       :coin ->
-        world = Map.replace(world, {x, y}, :empty)
+        world =
+          world
+          |> Map.replace({x, y}, :empty)
+          |> Map.replace(World.random_empty(world), :coin)
 
         player =
           player
@@ -119,10 +119,10 @@ defmodule World do
     end
   end
 
-  def random_spawn(world) do
+  def random_empty(world) do
     world
     |> Map.filter(fn
-      {_k, :spawn} -> true
+      {_k, :empty} -> true
       {_k, _v} -> false
     end)
     |> Map.keys()

@@ -20,7 +20,7 @@ defmodule LiveBuggies.GameManager do
     world = hd(@worlds)
     secret = UUID.uuid4()
 
-    {x, y} = World.random_spawn(world)
+    {x, y} = World.random_empty(world)
 
     game = %Game{
       id: game_id,
