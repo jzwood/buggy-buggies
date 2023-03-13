@@ -66,6 +66,11 @@ defmodule LiveBuggiesWeb.LiveWorld do
         class="map"
       >
       <rect x="0" y="0" width={@dim.mw} height={@dim.mh} fill="gray" shape-rendering='optimizeSpeed' />
+      <%= for %{history: history} <- Map.values(@game.players) do %>
+        <%= for [{x1, y1}, {x2, y2}] <- history_to_points(history) do %>
+          <GameComponent.tire_tracks x1={x1} y1={y1} x2={x2} y2={y2} />
+        <% end %>
+      <% end %>
       <%= for {{x, y}, cell} <- @game.world do %>
         <GameComponent.tile cell={cell} x={x} y={y} />
       <% end %>
@@ -77,10 +82,3 @@ defmodule LiveBuggiesWeb.LiveWorld do
     """
   end
 end
-
-# TIRE TRACKS ARE A DISTRACTION
-# <%= for %{history: history} <- Map.values(@game.players) do %>
-# <%= for [{x1, y1}, {x2, y2}] <- history_to_points(history) do %>
-# <GameComponent.tire_tracks x1={x1} y1={y1} x2={x2} y2={y2} />
-# <% end %>
-# <% end %>
