@@ -115,7 +115,7 @@ defmodule LiveBuggiesWeb.GameComponent do
         y={@y}
         width="0.5"
         height="1"
-        fill="red"
+        fill={"#{if @boom, do: "rgba(255, 255, 255, 0.3)", else: "red"}"}
         shape-rendering="geometricPrecision"
       />
       <rect

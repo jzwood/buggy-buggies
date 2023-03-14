@@ -18,11 +18,10 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
   * Source: https://github.com/phoenixframework/phoenix
 
 # TODO
-    implement kill game
     enforce rate limit
+    implement kill game
     show player scores
     rename modules
     deploy
     update readme
-    tire tracks?
 
