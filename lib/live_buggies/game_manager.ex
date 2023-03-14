@@ -9,9 +9,9 @@ defmodule LiveBuggies.GameManager do
   defp genserver_call(game_id, args) do
     name = get_name(game_id)
 
-    case GenServer.whereis(name) do
-      nil -> :error
-      _ -> GenServer.call(name, args)
+    case GenServer.whereis(name) |> IO.inspect(label: "HERE") do
+      pid when is_pid(pid) -> GenServer.call(name, args)
+      _ -> :error
     end
   end
 
@@ -41,9 +41,9 @@ defmodule LiveBuggies.GameManager do
     genserver_call(game_id, {:join, handle})
   end
 
-  def start_game(game_id: game_id, secret: secret) do
-    genserver_call(game_id, {:start_game, secret})
-  end
+  # def start_game(game_id: game_id, secret: secret) do
+  # genserver_call(game_id, {:start_game, secret})
+  # end
 
   def debug(game_id: game_id) do
     genserver_call(game_id, :debug)
@@ -61,8 +61,16 @@ defmodule LiveBuggies.GameManager do
     genserver_call(game_id, {:info, secret})
   end
 
-  def game_over(game_id: game_id) do
-    genserver_call(game_id, :game_over)
+  def kill(game_id: game_id) do
+    name = get_name(game_id)
+
+    with pid when is_pid(pid) <- GenServer.whereis(name),
+         :ok <- GenServer.stop(name) do
+      LiveWorlds.update_world_list(list_games())
+      :ok
+    else
+      _ -> :error
+    end
   end
 
   # Callbacks
@@ -114,10 +122,5 @@ defmodule LiveBuggies.GameManager do
     else
       err -> {:reply, err, game}
     end
-  end
-
-  @impl true
-  def handle_cast(:game_over, game) do
-    {:stop, :game_over, game}
   end
 end

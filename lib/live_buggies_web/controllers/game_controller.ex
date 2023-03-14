@@ -42,6 +42,16 @@ defmodule LiveBuggiesWeb.GameController do
 
   def info(conn, _), do: failure(conn)
 
+  # KILL
+  def kill(conn, %{"game_id" => game_id}) do
+    case GameManager.kill(game_id: game_id) do
+      :ok -> success(conn, :ok)
+      _ -> failure(conn)
+    end
+  end
+
+  def kill(conn, _), do: failure(conn)
+
   defp success(conn, result) do
     json(conn, %{success: true, reason: nil, result: result})
   end

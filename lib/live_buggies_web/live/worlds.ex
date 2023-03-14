@@ -48,9 +48,7 @@ defmodule LiveBuggiesWeb.LiveWorlds do
         <ol>
           <%= for game_id <- @games do %>
             <li>
-              <a data-phx-link="redirect" data-phx-link-state="push" href={"/game/#{ game_id }"}>
-                <%= game_id %>
-              </a>
+              <a data-phx-link="redirect" data-phx-link-state="push" href={"/game/#{ game_id }"}><%= game_id %></a>
             </li>
           <% end %>
         </ol>
