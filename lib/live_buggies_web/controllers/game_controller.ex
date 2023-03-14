@@ -15,7 +15,7 @@ defmodule LiveBuggiesWeb.GameController do
   # JOIN
   def join(conn, %{"game_id" => game_id, "handle" => handle}) do
     case GameManager.join(game_id: game_id, handle: handle) do
-      {:ok, secret} -> success(conn, secret)
+      {:ok, data} -> success(conn, data)
       _ -> failure(conn)
     end
   end

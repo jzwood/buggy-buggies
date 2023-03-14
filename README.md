@@ -18,7 +18,6 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
   * Source: https://github.com/phoenixframework/phoenix
 
 # TODO
-    make gold spawn after it is consumed
     implement kill game
     enforce rate limit
     show player scores

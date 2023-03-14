@@ -37,7 +37,6 @@ defmodule LiveBuggies.GameManager do
     {:ok, %{game_id: game_id, secret: secret, example: example}}
   end
 
-  # return %{secret: uuid, unix time game start}
   def join(game_id: game_id, handle: handle) do
     genserver_call(game_id, {:join, handle})
   end
@@ -76,8 +75,12 @@ defmodule LiveBuggies.GameManager do
   def handle_call({:join, handle}, _from, %Game{} = game) do
     # TODO prevent users with the same handle from joining
     secret = UUID.uuid4()
-    game = Game.add_player(game, handle: handle, secret: secret)
-    {:reply, {:ok, secret}, game}
+    %Game{id: game_id} = game = Game.add_player(game, handle: handle, secret: secret)
+
+    LiveWorld.update_game(game: game)
+    example = "curl -X GET http://localhost:4000/api/game/#{game_id}/player/#{secret}/move/N"
+
+    {:reply, {:ok, %{game_id: game_id, secret: secret, example: example}}, game}
   end
 
   @impl true
