@@ -46,9 +46,8 @@ defmodule LiveBuggiesWeb.LiveWorld do
   defp history_to_points([]), do: []
   defp history_to_points([_xy]), do: []
 
-  defp history_to_points([p1, p2 | history]) do
-    # [avg(p1, p2), p2 | history]
-    [p1, p2 | history]
+  defp history_to_points(history) do
+    history
     |> Enum.map(fn {x, y} -> {x + 0.5, y + 0.5} end)
     |> Enum.chunk_every(2, 1, :discard)
     |> Enum.filter(fn [p1, p2] -> manhattan_distance(p1, p2) == 1 end)
@@ -65,7 +64,7 @@ defmodule LiveBuggiesWeb.LiveWorld do
         version="1.1"
         class="map"
       >
-      <rect x="0" y="0" width={@dim.mw} height={@dim.mh} fill="gray" shape-rendering='optimizeSpeed' />
+      <rect x="0" y="0" width={@dim.mw} height={@dim.mh} fill="gray" shape-rendering="optimizeSpeed" />
       <%= for %{history: history} <- Map.values(@game.players) do %>
         <%= for [{x1, y1}, {x2, y2}] <- history_to_points(history) do %>
           <GameComponent.tire_tracks x1={x1} y1={y1} x2={x2} y2={y2} />
