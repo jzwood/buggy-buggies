@@ -37,7 +37,7 @@ defmodule LiveBuggiesWeb.LiveWorlds do
         <pre class="break-spaces">GET /api/game/&lt;game_id&gt;/join/&lt;handle&gt;</pre>
         <h2>game loop</h2>
         <p>collect gold. avoid crashing.</p>
-        <h2>move<sup>†</sup></h2>
+        <h2>move<sup class="courier normal">†</sup></h2>
         <pre class="break-spaces">GET /api/game/&lt;game_id&gt;/player/&lt;secret&gt;/move/&lt;N|E|S|W&gt;</pre>
         <h2>win</h2>
         <p><strike>beautiful algorithms are their own reward</strike> most gold wins.</p>
@@ -56,7 +56,7 @@ defmodule LiveBuggiesWeb.LiveWorlds do
       <div class="flex-grow-1"></div>
       <footer class="mt2 pv1 ph3 bg-moon-gray">
         <div class="flex gh2 items-baseline">
-          <h3>†</h3>
+          <h3 class="courier normal">†</h3>
           <i>api rate limit: 3 requests / second</i>
         </div>
       </footer>

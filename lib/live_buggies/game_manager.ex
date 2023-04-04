@@ -9,7 +9,7 @@ defmodule LiveBuggies.GameManager do
   defp genserver_call(game_id, args) do
     name = get_name(game_id)
 
-    case GenServer.whereis(name) |> IO.inspect(label: "HERE") do
+    case GenServer.whereis(name) do
       pid when is_pid(pid) -> GenServer.call(name, args)
       _ -> :error
     end

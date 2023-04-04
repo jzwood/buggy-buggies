@@ -26,6 +26,7 @@ defmodule LiveBuggiesWeb.GameController do
   def move(conn, %{"game_id" => game_id, "secret" => secret, "direction" => direction}) do
     case GameManager.move(game_id: game_id, secret: secret, move: direction) do
       {:ok, game} -> success(conn, game)
+      {:error, msg} -> failure(conn, msg)
       _ -> failure(conn)
     end
   end
