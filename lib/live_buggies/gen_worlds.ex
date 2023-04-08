@@ -84,26 +84,25 @@ defmodule CreateWorlds do
 
     files
     |> Enum.filter(&is_raw_world_map?/1)
-    |> Enum.map(&Path.join(abs_path, &1))
-    |> Enum.map(&File.read/1)
-    |> Enum.reduce([], fn {:ok, content}, worlds ->
-      [
-        content
-        |> String.trim()
-        | worlds
-      ]
+    |> Enum.map(fn file ->
+      path = Path.join(abs_path, file)
+      contents = File.read!(path)
+      world = create_world(contents)
+      {file, world}
     end)
+    |> Map.new()
   end
 
-  def create_worlds(ascii_worlds) do
-    ascii_worlds
-    |> Enum.map(&from_ascii/1)
-    |> Enum.map(&transform_world/1)
-  end
+  # def create_worlds(ascii_worlds) do
+  # ascii_worlds
+  # |> Enum.map(&from_ascii/1)
+  # |> Enum.map(&transform_world/1)
+  # end
 
-  def create_world(ascii_world) do
+  defp create_world(ascii_world) do
     ascii_world
-    |> from_ascii
-    |> transform_world
+    |> String.trim()
+    |> from_ascii()
+    |> transform_world()
   end
 end

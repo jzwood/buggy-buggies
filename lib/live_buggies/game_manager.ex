@@ -2,7 +2,7 @@ defmodule LiveBuggies.GameManager do
   use GenServer
   alias LiveBuggiesWeb.{LiveWorld, LiveWorlds}
 
-  @worlds CreateWorlds.get_ascii_worlds() |> CreateWorlds.create_worlds() |> Enum.reverse()
+  @worlds CreateWorlds.get_ascii_worlds()
 
   defp get_name(game_id), do: {:via, Registry, {:game_registry, game_id}}
 
@@ -17,7 +17,7 @@ defmodule LiveBuggies.GameManager do
 
   def host(handle: handle) do
     game_id = UUID.uuid4()
-    world = hd(@worlds)
+    world = Map.get(@worlds, "w0.txt")
     secret = UUID.uuid4()
 
     {x, y} = World.random_empty(world)
@@ -29,7 +29,8 @@ defmodule LiveBuggies.GameManager do
       players: %{secret => %Player{handle: handle, x: x, y: y}}
     }
 
-    example = "curl -X GET http://localhost:4000/api/game/#{game_id}/player/#{secret}/move/N"
+    example =
+      "curl -X GET #{LiveBuggiesWeb.Endpoint.url()}/api/game/#{game_id}/player/#{secret}/move/N"
 
     GenServer.start(__MODULE__, game, name: get_name(game_id))
     LiveWorlds.update_world_list(list_games())
@@ -86,7 +87,9 @@ defmodule LiveBuggies.GameManager do
     %Game{id: game_id} = game = Game.add_player(game, handle: handle, secret: secret)
 
     LiveWorld.update_game(game: game)
-    example = "curl -X GET http://localhost:4000/api/game/#{game_id}/player/#{secret}/move/N"
+
+    example =
+      "curl -X GET #{LiveBuggiesWeb.Endpoint.url()}/api/game/#{game_id}/player/#{secret}/move/N"
 
     {:reply, {:ok, %{game_id: game_id, secret: secret, example: example}}, game}
   end
