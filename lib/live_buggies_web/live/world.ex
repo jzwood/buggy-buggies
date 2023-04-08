@@ -40,7 +40,7 @@ defmodule LiveBuggiesWeb.LiveWorld do
   defp orientation_of(%Player{history: [{x, _y1}, {x, _y2} | _history]}), do: 0
   defp orientation_of(_), do: 90
 
-  defp avg({x1, y1}, {x2, y2}), do: {0.5 * (x1 + x2), 0.5 * (y1 + y2)}
+  #defp avg({x1, y1}, {x2, y2}), do: {0.5 * (x1 + x2), 0.5 * (y1 + y2)}
   defp manhattan_distance({x1, y1}, {x2, y2}), do: abs(x2 - x1) + abs(y2 - y1)
 
   defp history_to_points([]), do: []
