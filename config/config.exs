@@ -9,7 +9,7 @@ import Config
 
 # Configures the endpoint
 config :live_buggies, LiveBuggiesWeb.Endpoint,
-  url: [host: "0.0.0.0"],
+  url: [host: "localhost", host: "https://buggy-buggies.gigalixirapp.com"],
   render_errors: [view: LiveBuggiesWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: LiveBuggies.PubSub,
   live_view: [signing_salt: "ybLgsvPZ"]
