@@ -13,7 +13,6 @@ config :live_buggies, LiveBuggiesWeb.Endpoint,
   cache_static_manifest: "priv/static/cache_manifest.json",
   url: [host: "example.com", port: 443],
   https: [
-    ...,
     port: 443,
     cipher_suite: :strong,
     keyfile: System.get_env("SOME_APP_SSL_KEY_PATH"),
