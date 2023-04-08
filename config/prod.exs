@@ -10,7 +10,9 @@ import Config
 # which you should run after static files are built and
 # before starting your production server.
 config :live_buggies, LiveBuggiesWeb.Endpoint,
-  cache_static_manifest: "priv/static/cache_manifest.json"
+  cache_static_manifest: "priv/static/cache_manifest.json",
+  url: [host: "https://buggy-buggies.gigalixirapp.com", port: 443],
+  https: [port: 443]
 
 # Do not print debug messages in production
 config :logger, level: :info
