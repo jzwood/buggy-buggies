@@ -26,21 +26,24 @@ defmodule LiveBuggiesWeb.LiveWorlds do
   def render(assigns) do
     ~H"""
     <div class="flex flex-column min-vh-100">
-      <main class="worlds mw7 center items-baseline gv3 gh4 ph3 pv2 pv4-m pv5-l">
+      <main class="worlds mw8 center items-baseline gv3 gh4 ph3 pv2 pv4-m pv5-l">
         <h2>buggy buggies</h2>
         <p>
-          a game where winning means writing the best AI for a virtual dune-buggy.
+          a game where winning means writing the best dune-buggy AI.
         </p>
         <h2>host</h2>
         <pre class="break-spaces">GET /api/host/&lt;handle&gt;</pre>
         <h2>friends join</h2>
         <pre class="break-spaces">GET /api/game/&lt;game_id&gt;/join/&lt;handle&gt;</pre>
-        <h2>game loop</h2>
-        <p>collect gold. avoid crashing.</p>
         <h2>move<sup class="courier normal">†</sup></h2>
         <pre class="break-spaces">GET /api/game/&lt;game_id&gt;/player/&lt;secret&gt;/move/&lt;N|E|S|W&gt;</pre>
+        <h2>game state?</h2>
+        <pre class="break-spaces">GET /api/game/&lt;game_id&gt;/player/&lt;secret&gt;/info</pre>
         <h2>win</h2>
-        <p><strike>beautiful algorithms are their own reward</strike> most gold wins.</p>
+        <div>
+          <p><strike>beautiful algorithms are their own reward.</strike></p>
+          <p>collect gold. avoid crashing. most gold wins.</p>
+        </div>
         <h2>spectate</h2>
         <%= if length(@games) == 0 do %>
           <i>no games in progress</i>
