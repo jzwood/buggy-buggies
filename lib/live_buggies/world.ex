@@ -9,7 +9,17 @@ defmodule Player do
 end
 
 defmodule Game do
-  defstruct id: nil, world: %{}, host_secret: "", players: %{}
+  @expire_seconds 60 * 60
+
+  defstruct id: nil, world: %{}, host_secret: "", players: %{}, updated_at: 0
+
+  def expire_seconds(), do: @expire_seconds
+
+  def now(), do: :os.system_time(:second)
+
+  def is_expired(%Game{updated_at: updated_at}) do
+    updated_at + @expire_seconds > now()
+  end
 
   def fetch_player(game, player_secret) do
     Map.fetch(game.players, player_secret)
@@ -28,6 +38,10 @@ defmodule Game do
     %Game{game | world: world}
   end
 
+  def upsert_clock(%Game{} = game) do
+    %Game{game | updated_at: now()}
+  end
+
   # def start(%Game{host_secret: host_secret, open: false} = game, host_secret) do
   # {:ok, %{game | open: true}}
   # end
@@ -36,6 +50,8 @@ defmodule Game do
 end
 
 defmodule World do
+  #@history_limit 10
+
   defp update_history([], {x, y}), do: [{x, y}]
   defp update_history([{x, y} | _history] = history, {x, y}), do: history
   defp update_history(history, {x, y}), do: [{x, y} | history]

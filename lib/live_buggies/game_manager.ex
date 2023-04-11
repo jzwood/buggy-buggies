@@ -26,7 +26,8 @@ defmodule LiveBuggies.GameManager do
       id: game_id,
       world: world,
       host_secret: secret,
-      players: %{secret => %Player{handle: handle, x: x, y: y}}
+      players: %{secret => %Player{handle: handle, x: x, y: y}},
+      updated_at: Game.now()
     }
 
     example =
@@ -62,6 +63,14 @@ defmodule LiveBuggies.GameManager do
     genserver_call(game_id, {:info, secret})
   end
 
+  def kill_if_expired(game_id: game_id) do
+    genserver_call(game_id, :kill_if_expired)
+  end
+
+  def kill_expired_games() do
+    Enum.each(list_games(), &kill_if_expired(game_id: &1))
+  end
+
   def kill(game_id: game_id) do
     name = get_name(game_id)
 
@@ -77,6 +86,7 @@ defmodule LiveBuggies.GameManager do
   # Callbacks
   @impl true
   def init(game) do
+    :timer.apply_interval(Game.expire_seconds * 1000, __MODULE__, :kill_expired_games, [])
     {:ok, game}
   end
 
@@ -107,6 +117,7 @@ defmodule LiveBuggies.GameManager do
         game
         |> Game.upsert_world(world)
         |> Game.upsert_player(secret, player)
+        |> Game.upsert_clock()
 
       player_game = CreateWorlds.get_player_game(game, player)
       LiveWorld.update_game(game: game)
@@ -121,9 +132,19 @@ defmodule LiveBuggies.GameManager do
   def handle_call({:info, secret}, _from, %Game{} = game) do
     with {:ok, player} <- Game.fetch_player(game, secret) do
       player_game = CreateWorlds.get_player_game(game, player)
+      game = Game.upsert_clock(game)
       {:reply, {:ok, player_game}, game}
     else
       err -> {:reply, err, game}
+    end
+  end
+
+  @impl true
+  def handle_call(:kill_if_expired, _from, %Game{} = game) do
+    if Game.is_expired(game) do
+      {:stop, :normal, game}
+    else
+      {:replay, :ok, game}
     end
   end
 end
