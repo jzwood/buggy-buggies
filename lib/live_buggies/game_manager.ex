@@ -34,7 +34,7 @@ defmodule LiveBuggies.GameManager do
       "curl -X GET #{LiveBuggiesWeb.Endpoint.url()}/api/game/#{game_id}/player/#{secret}/move/N"
 
     GenServer.start(__MODULE__, game, name: get_name(game_id))
-    LiveWorlds.update_world_list(list_games())
+    update_liveview_list()
 
     {:ok, %{game_id: game_id, secret: secret, example: example}}
   end
@@ -63,12 +63,20 @@ defmodule LiveBuggies.GameManager do
     genserver_call(game_id, {:info, secret})
   end
 
-  def kill_if_expired(game_id: game_id) do
-    genserver_call(game_id, :kill_if_expired)
+  def expired?(game_id: game_id) do
+    genserver_call(game_id, :expired?)
+  end
+
+  def update_liveview_list() do
+    LiveWorlds.update_world_list(list_games())
   end
 
   def kill_expired_games() do
-    Enum.each(list_games(), &kill_if_expired(game_id: &1))
+    list_games()
+    |> Enum.filter(&expired?(game_id: &1))
+    |> Enum.each(&kill(game_id: &1))
+
+    :timer.apply_after(1000, __MODULE__, :update_liveview_list, [])
   end
 
   def kill(game_id: game_id) do
@@ -76,7 +84,6 @@ defmodule LiveBuggies.GameManager do
 
     with pid when is_pid(pid) <- GenServer.whereis(name),
          :ok <- GenServer.stop(name) do
-      LiveWorlds.update_world_list(list_games())
       :ok
     else
       _ -> :error
@@ -86,7 +93,6 @@ defmodule LiveBuggies.GameManager do
   # Callbacks
   @impl true
   def init(game) do
-    :timer.apply_interval(Game.expire_seconds * 1000, __MODULE__, :kill_expired_games, [])
     {:ok, game}
   end
 
@@ -140,11 +146,7 @@ defmodule LiveBuggies.GameManager do
   end
 
   @impl true
-  def handle_call(:kill_if_expired, _from, %Game{} = game) do
-    if Game.is_expired(game) do
-      {:stop, :normal, game}
-    else
-      {:replay, :ok, game}
-    end
+  def handle_call(:expired?, _from, %Game{} = game) do
+    {:reply, Game.is_expired(game), game}
   end
 end

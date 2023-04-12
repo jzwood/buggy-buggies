@@ -18,7 +18,7 @@ defmodule Game do
   def now(), do: :os.system_time(:second)
 
   def is_expired(%Game{updated_at: updated_at}) do
-    updated_at + @expire_seconds > now()
+    updated_at + @expire_seconds < now()
   end
 
   def fetch_player(game, player_secret) do
@@ -50,7 +50,7 @@ defmodule Game do
 end
 
 defmodule World do
-  #@history_limit 10
+  # @history_limit 10
 
   defp update_history([], {x, y}), do: [{x, y}]
   defp update_history([{x, y} | _history] = history, {x, y}), do: history
