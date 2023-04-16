@@ -24,8 +24,10 @@ defmodule LiveBuggiesWeb.GameController do
 
   # MOVE
   def move(conn, %{"game_id" => game_id, "secret" => secret, "direction" => direction}) do
-    case GameManager.move(game_id: game_id, secret: secret, move: direction) do
-      {:ok, game} -> success(conn, game)
+    with :ok <- LiveBuggiesWeb.Throttle.rate_limit(secret),
+         {:ok, game} <- GameManager.move(game_id: game_id, secret: secret, move: direction) do
+      success(conn, game)
+    else
       {:error, msg} -> failure(conn, msg)
       _ -> failure(conn)
     end
@@ -35,8 +37,11 @@ defmodule LiveBuggiesWeb.GameController do
 
   # INFO
   def info(conn, %{"game_id" => game_id, "secret" => secret}) do
-    case GameManager.info(game_id: game_id, secret: secret) do
-      {:ok, game} -> success(conn, game)
+    with :ok <- LiveBuggiesWeb.Throttle.rate_limit(secret),
+         {:ok, game} <- GameManager.info(game_id: game_id, secret: secret) do
+      success(conn, game)
+    else
+      {:error, msg} -> failure(conn, msg)
       _ -> failure(conn)
     end
   end

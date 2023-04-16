@@ -60,7 +60,7 @@ defmodule LiveBuggiesWeb.LiveWorlds do
       <footer class="mt2 pv1 ph3 bg-moon-gray">
         <div class="flex gh2 items-baseline">
           <h3 class="courier normal">†</h3>
-          <i>api rate limit: 3 requests / second</i>
+          <i>api rate limit: 10 requests / second</i>
         </div>
       </footer>
     </div>

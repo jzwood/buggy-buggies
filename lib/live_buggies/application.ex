@@ -17,7 +17,8 @@ defmodule LiveBuggies.Application do
       # {DynamicSupervisor, strategy: :one_for_one, name: :dswhatever},
       # Start the Endpoint (http/https)
       LiveBuggiesWeb.Endpoint,
-      LiveBuggies.Cron
+      LiveBuggies.Cron,
+      LiveBuggiesWeb.ThrottleCallCache
       # Start a worker by calling: LiveBuggies.Worker.start_link(arg)
       # {LiveBuggies.Worker, arg}
     ]
