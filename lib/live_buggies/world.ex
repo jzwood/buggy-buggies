@@ -50,11 +50,11 @@ defmodule Game do
 end
 
 defmodule World do
-  # @history_limit 10
+  @history_limit 45
 
   defp update_history([], {x, y}), do: [{x, y}]
   defp update_history([{x, y} | _history] = history, {x, y}), do: history
-  defp update_history(history, {x, y}), do: [{x, y} | history]
+  defp update_history(history, {x, y}), do: [{x, y} | history] |> Enum.take(@history_limit)
 
   defp update_position(%Player{history: history} = player, {x, y}) do
     %Player{player | x: x, y: y, history: update_history(history, {x, y})}
