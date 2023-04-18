@@ -1,6 +1,6 @@
 # Buggy Buggies
 
-Buggy Buggies is a meta-game where you navigate a virtual dune-buggy to avoid traps and collect more coins than their opponents. Your tools to accomplish this task include the following apis:
+Buggy Buggies is a meta-game where you navigate a virtual dune-buggy to avoid traps and collect more coins than your opponents. Your tools to accomplish this task include the following apis:
 
 ```
 - GET /api/host/<handle>
@@ -13,7 +13,7 @@ The meta-game is how to use these APIs to write a bot to play Buggy Buggies.
 
 <img src="assets/img/screenshot.png" alt="">
 
-### DEV
+### LOCAL
 
     mix deps.get
     mix compile
@@ -23,4 +23,3 @@ The meta-game is how to use these APIs to write a bot to play Buggy Buggies.
 ### TODO
     rename modules
     add distinct player colors
-    update readme
