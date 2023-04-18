@@ -44,6 +44,8 @@ defmodule LiveBuggiesWeb.LiveWorlds do
           <p><strike>beautiful algorithms are their own reward.</strike></p>
           <p>collect gold. avoid crashing. most gold wins.</p>
         </div>
+        <h2>beep boop</h2>
+        <a href="https://github.com/jzwood/buggy-buggies/tree/main/examples" target="_blank">bot code samples</a>
         <h2>spectate</h2>
         <%= if length(@games) == 0 do %>
           <i>no games in progress</i>
@@ -57,11 +59,14 @@ defmodule LiveBuggiesWeb.LiveWorlds do
         </ol>
       </main>
       <div class="flex-grow-1"></div>
-      <footer class="mt2 pv1 ph3 bg-moon-gray">
+      <footer class="flex items-center justify-between gh2 mt2 pv1 ph3 bg-moon-gray">
         <div class="flex gh2 items-baseline">
           <h3 class="courier normal">†</h3>
           <i>api rate limit: 10 requests / second</i>
         </div>
+        <a href="https://github.com/jzwood/buggy-buggies" target="_blank" class="flex flex-shrink-0">
+          <img class="h2" src="/images/github-mark.svg" alt="view project on github"/>
+        </a>
       </footer>
     </div>
     """

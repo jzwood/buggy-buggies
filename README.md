@@ -1,27 +1,28 @@
-# LiveBuggies
+# Buggy Buggies
 
-To start your Phoenix server:
+Buggy Buggies is a meta-game where you navigate a virtual dune-buggy to avoid traps and collect more coins than their opponents. Your tools to accomplish this task include the following apis:
 
-  * Install dependencies with `mix deps.get`
-  * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
+```
+- GET /api/host/<handle>
+- GET /api/game/<game_id>/join/<handle>
+- GET /api/game/<game_id>/player/<secret>/move/<N|E|S|W>
+- GET /api/game/<game_id>/player/<secret>/info
+```
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+The meta-game is how to use these APIs to write a bot to play Buggy Buggies.
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+<img src="assets/img/screenshot.png" alt="">
 
-## Learn more
+### DEV
 
-  * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix
+    mix deps.get
+    mix compile
+    mix start
+    open http://localhost:4000
 
-# TODO
-    enforce rate limit
-    implement kill game
-    show player scores
+### TODO
+    add player collisions
     rename modules
-    deploy
+    add distinct player colors
+    make tire-tracks fade
     update readme
-
