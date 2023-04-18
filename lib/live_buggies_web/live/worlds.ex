@@ -45,7 +45,7 @@ defmodule LiveBuggiesWeb.LiveWorlds do
           <p>collect gold. avoid crashing. most gold wins.</p>
         </div>
         <h2>beep boop</h2>
-        <a href="https://github.com/jzwood/buggy-buggies/tree/main/examples" target="_blank">bot code samples</a>
+        <a href="https://github.com/jzwood/buggy-buggies/tree/main/examples" target="_blank">code samples</a>
         <h2>spectate</h2>
         <%= if length(@games) == 0 do %>
           <i>no games in progress</i>
@@ -65,7 +65,7 @@ defmodule LiveBuggiesWeb.LiveWorlds do
           <i>api rate limit: 10 requests / second</i>
         </div>
         <a href="https://github.com/jzwood/buggy-buggies" target="_blank" class="flex flex-shrink-0">
-          <img class="h2" src="/images/github-mark.svg" alt="view project on github"/>
+          <img class="h2 mv1" src="/images/github-mark.svg" alt="view project on github"/>
         </a>
       </footer>
     </div>
