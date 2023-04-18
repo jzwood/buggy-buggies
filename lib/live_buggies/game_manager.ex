@@ -118,7 +118,7 @@ defmodule LiveBuggies.GameManager do
   @impl true
   def handle_call({:move, secret, move}, _from, %Game{} = game) do
     with {:ok, player} <- Game.fetch_player(game, secret),
-         {:ok, world, player} <- World.next_world(world: game.world, player: player, move: move) do
+         {:ok, world, player} <- World.next_world(game: game, player: player, move: move) do
       game =
         game
         |> Game.upsert_world(world)

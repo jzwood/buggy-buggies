@@ -63,6 +63,19 @@ defmodule World do
   defp increment_purse(%Player{purse: purse} = player), do: %Player{player | purse: purse + 1}
   defp crash(%Player{boom: _boom} = player), do: %Player{player | boom: true}
 
+  defp collision?(player: %Player{x: px, y: py}, move: {mx, my}, players: players) do
+    px = px + mx
+    py = py + my
+
+    case players
+         |> Map.values()
+         |> Enum.find(fn %Player{x: x, y: y} -> x == px and y == py end)
+         |> is_nil() do
+      true -> :ok
+      false -> {:error, "square already occupied"}
+    end
+  end
+
   defp move(world, %Player{boom: true} = player, _m), do: {:ok, world, player}
 
   defp move(world, %Player{x: px, y: py} = player, {mx, my}) do
@@ -156,8 +169,9 @@ defmodule World do
     |> Enum.random()
   end
 
-  def next_world(world: world, player: player, move: direction) do
+  def next_world(game: %Game{world: world, players: players}, player: player, move: direction) do
     with {:ok, {mx, my}} <- parse_direction(direction),
+         :ok <- collision?(player: player, move: {mx, my}, players: players),
          {:ok, world, player} <- move(world, player, {mx, my}) do
       {:ok, world, player}
     end

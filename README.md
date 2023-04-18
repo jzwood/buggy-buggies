@@ -21,7 +21,6 @@ The meta-game is how to use these APIs to write a bot to play Buggy Buggies.
     open http://localhost:4000
 
 ### TODO
-    add player collisions
     rename modules
     add distinct player colors
     make tire-tracks fade
