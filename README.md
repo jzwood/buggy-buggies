@@ -21,4 +21,9 @@ The meta-game is how to use these APIs to write a bot to play Buggy Buggies.
     open http://localhost:4000
 
 ### TODO
-    rename modules
+    add more language examples
+    add host management APIs
+        - kick player
+        - reset game
+    add new maps
+    rename modules (internal)
