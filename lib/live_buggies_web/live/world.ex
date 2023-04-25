@@ -74,7 +74,7 @@ defmodule LiveBuggiesWeb.LiveWorld do
         <GameComponent.tile cell={cell} x={x} y={y} />
       <% end %>
       <%= for player <- Map.values(@game.players) do %>
-        <GameComponent.player x={player.x} y={player.y} boom={player.boom} orientation={orientation_of(player)} />
+        <GameComponent.player x={player.x} y={player.y} boom={player.boom} index={player.index} orientation={orientation_of(player)} />
       <% end %>
       <text x="1" y="0.75" style="font-size: 0.5px; font-family: verdana;" class="ttl">
         <%= Map.values(@game.players) |> Enum.map_join(" | ", fn %{handle: handle, boom: boom, purse: purse} -> "#{handle}: #{purse} #{if boom, do: "x", else: ""}" end) %>

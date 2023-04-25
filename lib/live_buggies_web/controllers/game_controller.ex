@@ -6,6 +6,7 @@ defmodule LiveBuggiesWeb.GameController do
   def host(conn, %{"handle" => handle}) do
     case GameManager.host(handle: handle) do
       {:ok, data} -> success(conn, data)
+      {:error, msg} -> failure(conn, msg)
       _ -> failure(conn)
     end
   end
@@ -16,6 +17,7 @@ defmodule LiveBuggiesWeb.GameController do
   def join(conn, %{"game_id" => game_id, "handle" => handle}) do
     case GameManager.join(game_id: game_id, handle: handle) do
       {:ok, data} -> success(conn, data)
+      {:error, msg} -> failure(conn, msg)
       _ -> failure(conn)
     end
   end

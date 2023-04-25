@@ -22,4 +22,3 @@ The meta-game is how to use these APIs to write a bot to play Buggy Buggies.
 
 ### TODO
     rename modules
-    add distinct player colors

@@ -1,6 +1,7 @@
 defmodule Player do
   @derive {Jason.Encoder, only: [:handle, :purse, :boom, :x, :y]}
   defstruct handle: nil,
+            index: 0,
             purse: 0,
             boom: false,
             x: nil,
@@ -27,7 +28,15 @@ defmodule Game do
 
   def add_player(%Game{} = game, handle: handle, secret: secret) do
     {x, y} = World.random_empty(game.world)
-    Game.upsert_player(game, secret, %Player{handle: handle, x: x, y: y, history: [{x, y}]})
+    index = Enum.count(game.players)
+
+    Game.upsert_player(game, secret, %Player{
+      handle: handle,
+      x: x,
+      y: y,
+      index: index,
+      history: [{x, y}]
+    })
   end
 
   def upsert_player(%Game{} = game, secret, player) do

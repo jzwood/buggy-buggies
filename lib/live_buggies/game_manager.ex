@@ -4,6 +4,14 @@ defmodule LiveBuggies.GameManager do
 
   @worlds CreateWorlds.get_ascii_worlds()
 
+  defp move_example(game_id: game_id, secret: secret) do
+    "curl -X GET #{LiveBuggiesWeb.Endpoint.url()}/api/game/#{game_id}/player/#{secret}/move/N"
+  end
+
+  defp spectate_example(game_id: game_id) do
+    "#{LiveBuggiesWeb.Endpoint.url()}/game/#{game_id}"
+  end
+
   defp get_name(game_id), do: {:via, Registry, {:game_registry, game_id}}
 
   defp genserver_call(game_id, args) do
@@ -20,23 +28,22 @@ defmodule LiveBuggies.GameManager do
     world = Map.get(@worlds, "w0.txt")
     secret = UUID.uuid4()
 
-    {x, y} = World.random_empty(world)
+    game =
+      %Game{
+        id: game_id,
+        world: world,
+        host_secret: secret,
+        updated_at: Game.now()
+      }
+      |> Game.add_player(handle: handle, secret: secret)
 
-    game = %Game{
-      id: game_id,
-      world: world,
-      host_secret: secret,
-      players: %{secret => %Player{handle: handle, x: x, y: y}},
-      updated_at: Game.now()
-    }
-
-    example =
-      "curl -X GET #{LiveBuggiesWeb.Endpoint.url()}/api/game/#{game_id}/player/#{secret}/move/N"
+    example = move_example(game_id: game_id, secret: secret)
+    watch = spectate_example(game_id: game_id)
 
     GenServer.start(__MODULE__, game, name: get_name(game_id))
     update_liveview_list()
 
-    {:ok, %{game_id: game_id, secret: secret, example: example}}
+    {:ok, %{game_id: game_id, secret: secret, example: example, watch: watch}}
   end
 
   def join(game_id: game_id, handle: handle) do
@@ -100,14 +107,19 @@ defmodule LiveBuggies.GameManager do
   def handle_call({:join, handle}, _from, %Game{} = game) do
     # TODO prevent users with the same handle from joining
     secret = UUID.uuid4()
-    %Game{id: game_id} = game = Game.add_player(game, handle: handle, secret: secret)
+    %Game{id: game_id} = new_game = Game.add_player(game, handle: handle, secret: secret)
 
-    LiveWorld.update_game(game: game)
+    if Enum.count(new_game.players) > 9 do
+      {:reply, {:error, "game is full"}, game}
+    else
+      example = move_example(game_id: game_id, secret: secret)
+      watch = spectate_example(game_id: game_id)
 
-    example =
-      "curl -X GET #{LiveBuggiesWeb.Endpoint.url()}/api/game/#{game_id}/player/#{secret}/move/N"
+      LiveWorld.update_game(game: new_game)
 
-    {:reply, {:ok, %{game_id: game_id, secret: secret, example: example}}, game}
+      {:reply, {:ok, %{game_id: game_id, secret: secret, example: example, watch: watch}},
+       new_game}
+    end
   end
 
   @impl true

@@ -110,12 +110,11 @@ defmodule LiveBuggiesWeb.GameComponent do
     style={"transform: rotate(#{@orientation}deg);"}
     >
       <rect
-        class="buggy"
+      class={"buggy #{if @boom, do: "crashed", else: ""} buggy-#{@index}"}
         x={@x + 0.25}
         y={@y}
         width="0.5"
         height="1"
-        fill={"#{if @boom, do: "rgba(255, 255, 255, 0.3)", else: "red"}"}
         shape-rendering="geometricPrecision"
       />
       <rect

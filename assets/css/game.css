@@ -50,13 +50,47 @@ svg.map {
   stroke: 1px black;
 }
 
-.buggy {
-  /*transition: x var(--turn-speed), y var(--turn-speed), transform-origin var(--turn-speed);*/
+.buggy {}
+
+.buggy.crashed {
+  fill: rgba(255, 255, 255, 0.3);
 }
 
-/*.tire-tracks {*/
-  /*transition: x1 var(--turn-speed), y1 var(--turn-speed), x2 var(--turn-speed), y2 var(--turn-speed)*/
-/*}*/
+.buggy-0 {
+  fill: #FF0000;
+}
+
+.buggy-1 {
+  fill: #00FF00;
+}
+
+.buggy-2 {
+  fill: #0000FF;
+}
+
+.buggy-3 {
+  fill: #FFFF00;
+}
+
+.buggy-4 {
+  fill: #00FFFF;
+}
+
+.buggy-5 {
+  fill: #FF00FF;
+}
+
+.buggy-6 {
+  fill: #FF7700;
+}
+
+.buggy-7 {
+  fill: #FFFFFF;
+}
+
+.buggy-8 {
+  fill: #444444;
+}
 
 main.worlds {
  display: grid;
