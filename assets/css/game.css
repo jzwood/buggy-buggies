@@ -53,7 +53,7 @@ svg.map {
 .buggy {}
 
 .buggy.crashed {
-  fill: rgba(255, 255, 255, 0.3);
+  opacity: 20%;
 }
 
 .buggy-0 {
@@ -93,8 +93,8 @@ svg.map {
 }
 
 main.worlds {
- display: grid;
- grid-template-columns: auto auto;
+  display: grid;
+  grid-template-columns: auto auto;
 }
 
 main.worlds h2 {
