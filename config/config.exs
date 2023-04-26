@@ -14,6 +14,9 @@ config :live_buggies, LiveBuggiesWeb.Endpoint,
   pubsub_server: LiveBuggies.PubSub,
   live_view: [signing_salt: "ybLgsvPZ"]
 
+config :live_buggies,
+  sandbox?: System.get_env("SANDBOX")
+
 # Configure esbuild (the version is required)
 config :esbuild,
   version: "0.14.29",

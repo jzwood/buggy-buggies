@@ -1,8 +1,12 @@
 defmodule LiveBuggiesWeb.Throttle do
   require Logger
 
+  defp throttle?() do
+    !Application.get_env(:live_buggies, :sandbox?)
+  end
+
   def rate_limit(secret) do
-    if rate_limit?(secret, 1, 10) do
+    if throttle?() and rate_limit?(secret, 1, 10) do
       {:error, :throttle}
     else
       :ok
