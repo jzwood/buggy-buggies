@@ -11,19 +11,39 @@ Buggy Buggies is a meta-game where you navigate a virtual dune-buggy to avoid tr
 
 The meta-game is how to use these APIs to write a bot to play Buggy Buggies.
 
-<img src="assets/img/screenshot.png" alt="">
+<a href="https://buggy-buggies.gigalixirapp.com/">https://buggy-buggies.gigalixirapp.com/</a>
 
-### LOCAL
+<a href="https://buggy-buggies.gigalixirapp.com/" target="_blank">
+  <img src="assets/img/screenshot2.png" alt="">
+</a>
+
+
+## Complete API
+
+### Join Game
+```
+GET  /api/host/:handle                // create game and join
+GET  /api/game/:game_id/join/:handle  // join game
+```
+
+### Player API
+```
+GET  /api/game/:game_id/player/:secret/info             // get game state
+GET  /api/game/:game_id/player/:secret/move/:direction  // move buggy 1 square
+```
+
+### Host API
+```
+GET  /api/game/:game_id/player/:secret/restart  // resets all players' positions and purses
+GET  /api/game/:game_id/player/:secret/purge    // removes all players from game other than host
+```
+
+### RUN LOCALLY
 
     mix deps.get
     mix compile
     mix start
     open http://localhost:4000
 
-### TODO
-    add more language examples
-    add host management APIs
-        - kick player
-        - reset game
-    add new maps
-    rename modules (internal)
+    SANDBOX=true mix start  # run with rate limiting turned off
+

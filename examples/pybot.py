@@ -1,21 +1,23 @@
 import requests
 import random
 from os import path
+import sys
 from time import sleep
 
 """
 USAGE:
     host or join game then run:
-    python3 example.py
+    python3 pybot.py <domain> <game_id> <secret>
+
+EXAMPLE:
+    python3 pybot.py http://localhost:4000 a6bcfe56-7cc2-4eca-9f3c-786bce95a5e0 bac20489-ffb1-4fbc-925a-ae8e75dbdd55
 """
 
 def random_direction():
     return random.choice(['N', 'E', 'S', 'W'])
 
 def main():
-    game_id = input("game id: ")
-    secret = input("secret: ")
-    domain = input("domain: ")
+    [_script, domain, game_id, secret] = sys.argv
 
     base_url = path.join(domain, "api", "game", game_id, "player", secret)
 
@@ -23,13 +25,15 @@ def main():
     state = resp.json()
 
     print(state)
-    print(random_direction())
+    crashed = False
 
-    while state["result"]["you"]["boom"] == False:
+    while not crashed:
         sleep(0.5)
-
         resp = requests.get(path.join(base_url, "move", random_direction()))
         state = resp.json()
-        print(state)
+        if state["success"]:
+            crashed = state["result"]["you"]["boom"]
+            print(state)
+    print("crashed")
 
 main()
