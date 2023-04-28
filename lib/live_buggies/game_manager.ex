@@ -25,7 +25,7 @@ defmodule LiveBuggies.GameManager do
 
   def host(handle: handle) do
     game_id = UUID.uuid4()
-    world = Map.get(@worlds, "w0.txt")
+    world = Map.get(@worlds, "w1.txt")
     secret = UUID.uuid4()
 
     game =
@@ -68,6 +68,10 @@ defmodule LiveBuggies.GameManager do
 
   def info(game_id: game_id, secret: secret) do
     genserver_call(game_id, {:info, secret})
+  end
+
+  def reset(game_id: game_id, secret: secret) do
+    genserver_call(game_id, {:reset, secret})
   end
 
   def expired?(game_id: game_id) do
@@ -154,6 +158,19 @@ defmodule LiveBuggies.GameManager do
       {:reply, {:ok, player_game}, game}
     else
       err -> {:reply, err, game}
+    end
+  end
+
+  @impl true
+  def handle_call({:reset, secret}, _from, %Game{} = game) do
+    if secret == game.host_secret do
+      game = Game.reset_players(game)
+             |> Game.upsert_clock()
+
+      LiveWorld.update_game(game: game)
+      {:reply, {:ok, :ok}, game}
+    else
+      {:reply, :unauthorized, game}
     end
   end
 

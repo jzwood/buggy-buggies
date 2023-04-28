@@ -39,6 +39,17 @@ defmodule Game do
     })
   end
 
+  def reset_player!(%Game{} = game, secret: secret) do
+    {:ok, player} = fetch_player(game, secret)
+    {x, y} = World.random_empty(game.world)
+    upsert_player(game, secret, %Player{player | purse: 0, boom: false, x: x, y: y, history: [{x, y}] })
+  end
+
+  def reset_players(%Game{} = game) do
+    secrets = Map.keys(game.players)
+    Enum.reduce(secrets, game, fn secret, game -> Game.reset_player!(game, secret: secret) end)
+  end
+
   def upsert_player(%Game{} = game, secret, player) do
     %Game{game | players: Map.put(game.players, secret, player)}
   end

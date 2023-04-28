@@ -21,6 +21,7 @@ defmodule LiveBuggiesWeb.Router do
     get "/game/:game_id/join/:handle", GameController, :join
     get "/game/:game_id/player/:secret/info", GameController, :info
     get "/game/:game_id/player/:secret/move/:direction", GameController, :move
+    get "/game/:game_id/player/:secret/reset", GameController, :reset
     get "/game/:game_id/kill", GameController, :kill
   end
 
