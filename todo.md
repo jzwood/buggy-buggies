@@ -1,7 +1,7 @@
 ### TODO
-    add more language examples
     add host management APIs
         - kick player
-        - reset game
     add new maps
+        - add way to view/host specific maps
+    add buggy favicon
     rename modules (internal)
