@@ -19,13 +19,13 @@ async function loop(url) {
   let resp = await callRemote(url + "/info");
   let crashed = false;
   while (!crashed) {
+    await sleep(500);
     const { reason, result, success } = resp;
     if (success) {
       let { world, you: { x, y, boom } } = result;
       crashed = boom;
     }
     const dir = randomDirection();
-    console.info({dir, x, y})
     const move = `/move/${dir}`;
     resp = await callRemote(url + move);
   }
