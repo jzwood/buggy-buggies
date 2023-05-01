@@ -78,6 +78,10 @@
   white-space: break-spaces;
 }
 
+.break-word {
+  word-break: break-word
+}
+
 .cursive {
   font-family: cursive;
 }

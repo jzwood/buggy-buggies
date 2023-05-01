@@ -32,13 +32,13 @@ defmodule LiveBuggiesWeb.LiveWorlds do
           a game where winning means writing the best dune-buggy AI.
         </p>
         <h2>host</h2>
-        <pre class="break-spaces">GET /api/host/&lt;handle&gt;</pre>
+        <pre class="break-spaces break-word">GET /api/host/&lt;handle&gt;</pre>
         <h2>friends join</h2>
-        <pre class="break-spaces">GET /api/game/&lt;game_id&gt;/join/&lt;handle&gt;</pre>
+        <pre class="break-spaces break-word">GET /api/game/&lt;game_id&gt;/join/&lt;handle&gt;</pre>
         <h2>move<sup class="courier normal">†</sup></h2>
-        <pre class="break-spaces">GET /api/game/&lt;game_id&gt;/player/&lt;secret&gt;/move/&lt;N|E|S|W&gt;</pre>
+        <pre class="break-spaces break-word">GET /api/game/&lt;game_id&gt;/player/&lt;secret&gt;/move/&lt;N|E|S|W&gt;</pre>
         <h2>game state?</h2>
-        <pre class="break-spaces">GET /api/game/&lt;game_id&gt;/player/&lt;secret&gt;/info</pre>
+        <pre class="break-spaces break-word">GET /api/game/&lt;game_id&gt;/player/&lt;secret&gt;/info</pre>
         <h2>win</h2>
         <div>
           <p><strike>beautiful algorithms are their own reward.</strike></p>
