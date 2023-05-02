@@ -1,4 +1,4 @@
-defmodule LiveBuggiesWeb.LiveWorlds do
+defmodule LiveBuggiesWeb.LiveHome do
   use Phoenix.LiveView
 
   @game_list "games"

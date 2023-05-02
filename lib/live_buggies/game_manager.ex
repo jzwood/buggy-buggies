@@ -1,8 +1,7 @@
 defmodule LiveBuggies.GameManager do
   use GenServer
-  alias LiveBuggiesWeb.{LiveWorld, LiveWorlds}
-
-  @worlds CreateWorlds.get_ascii_worlds()
+  alias LiveBuggiesWeb.{LiveGame, LiveHome}
+  alias LiveBuggies.WorldServer
 
   defp move_example(game_id: game_id, secret: secret) do
     "curl -X GET #{LiveBuggiesWeb.Endpoint.url()}/api/game/#{game_id}/player/#{secret}/move/N"
@@ -25,7 +24,7 @@ defmodule LiveBuggies.GameManager do
 
   def host(handle: handle) do
     game_id = UUID.uuid4()
-    world = Map.get(@worlds, "w1.txt")
+    world = WorldServer.get("w0")
     secret = UUID.uuid4()
 
     game =
@@ -79,7 +78,7 @@ defmodule LiveBuggies.GameManager do
   end
 
   def update_liveview_list() do
-    LiveWorlds.update_world_list(list_games())
+    LiveHome.update_world_list(list_games())
   end
 
   def kill_expired_games() do
@@ -119,7 +118,7 @@ defmodule LiveBuggies.GameManager do
       example = move_example(game_id: game_id, secret: secret)
       watch = spectate_example(game_id: game_id)
 
-      LiveWorld.update_game(game: new_game)
+      LiveGame.update_game(game: new_game)
 
       {:reply, {:ok, %{game_id: game_id, secret: secret, example: example, watch: watch}},
        new_game}
@@ -142,7 +141,7 @@ defmodule LiveBuggies.GameManager do
         |> Game.upsert_clock()
 
       player_game = CreateWorlds.get_player_game(game, player)
-      LiveWorld.update_game(game: game)
+      LiveGame.update_game(game: game)
 
       {:reply, {:ok, player_game}, game}
     else
@@ -164,10 +163,11 @@ defmodule LiveBuggies.GameManager do
   @impl true
   def handle_call({:reset, secret}, _from, %Game{} = game) do
     if secret == game.host_secret do
-      game = Game.reset_players(game)
-             |> Game.upsert_clock()
+      game =
+        Game.reset_players(game)
+        |> Game.upsert_clock()
 
-      LiveWorld.update_game(game: game)
+      LiveGame.update_game(game: game)
       {:reply, {:ok, :ok}, game}
     else
       {:reply, :unauthorized, game}

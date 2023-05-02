@@ -1,4 +1,4 @@
-defmodule LiveBuggiesWeb.LiveWorld do
+defmodule LiveBuggiesWeb.LiveGame do
   use Phoenix.LiveView
   use Phoenix.HTML
   alias LiveBuggiesWeb.GameComponent

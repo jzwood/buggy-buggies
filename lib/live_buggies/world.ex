@@ -42,7 +42,15 @@ defmodule Game do
   def reset_player!(%Game{} = game, secret: secret) do
     {:ok, player} = fetch_player(game, secret)
     {x, y} = World.random_empty(game.world)
-    upsert_player(game, secret, %Player{player | purse: 0, boom: false, x: x, y: y, history: [{x, y}] })
+
+    upsert_player(game, secret, %Player{
+      player
+      | purse: 0,
+        boom: false,
+        x: x,
+        y: y,
+        history: [{x, y}]
+    })
   end
 
   def reset_players(%Game{} = game) do

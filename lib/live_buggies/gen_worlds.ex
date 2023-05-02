@@ -88,7 +88,8 @@ defmodule CreateWorlds do
       path = Path.join(abs_path, file)
       contents = File.read!(path)
       world = create_world(contents)
-      {file, world}
+      root = Path.rootname(file)
+      {root, world}
     end)
     |> Map.new()
   end

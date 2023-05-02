@@ -50,7 +50,6 @@ defmodule LiveBuggiesWeb.GameController do
 
   def info(conn, _), do: failure(conn)
 
-
   # RESTART
   def reset(conn, %{"game_id" => game_id, "secret" => secret}) do
     with :ok <- LiveBuggiesWeb.Throttle.rate_limit(secret),
