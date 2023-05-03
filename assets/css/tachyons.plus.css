@@ -74,6 +74,14 @@
   }
 }
 
+.grid {
+  display: grid;
+}
+
+.cols-2 {
+  grid-template-columns: repeat(2, auto);
+}
+
 .break-spaces {
   white-space: break-spaces;
 }
@@ -84,4 +92,8 @@
 
 .cursive {
   font-family: cursive;
+}
+
+.bg-gray {
+  background-color: gray;
 }

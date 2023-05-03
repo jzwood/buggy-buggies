@@ -29,6 +29,7 @@ defmodule LiveBuggiesWeb.Router do
     pipe_through :browser
 
     live("/", LiveHome)
+    live("/worlds", LiveWorlds)
     live("/game/:game_id", LiveGame)
   end
 

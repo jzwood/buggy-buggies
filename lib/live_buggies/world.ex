@@ -17,7 +17,12 @@ end
 defmodule Game do
   @expire_seconds 60 * 60
 
-  defstruct id: nil, world: %{}, dimensions: %Dimensions{},  host_secret: "", players: %{}, updated_at: 0
+  defstruct id: nil,
+            world: %{},
+            dimensions: %Dimensions{},
+            host_secret: "",
+            players: %{},
+            updated_at: 0
 
   def expire_seconds(), do: @expire_seconds
 

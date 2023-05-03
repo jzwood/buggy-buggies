@@ -8,24 +8,27 @@ defmodule LiveBuggiesWeb.LiveWorlds do
     {:ok, assign(socket, :worlds, worlds)}
   end
 
-  # ADD WIDTH AND HEIGHT TO WORLD DATA
   def render(assigns) do
-    #assigns = assign(assigns, :dim, get_world_dimensions(assigns.game.world))
-
     ~H"""
-    <div class="map-container">
-      <svg
-        viewBox={"0 0 #{@dim.mw} #{@dim.mh}"}
-        xmlns="http://www.w3.org/2000/svg"
-        version="1.1"
-        class="map"
-      >
-      <rect x="0" y="0" width={@dim.mw} height={@dim.mh} fill="gray" shape-rendering="optimizeSpeed" />
-      <%= for {{x, y}, cell} <- @game.world do %>
-        <GameComponent.tile cell={cell} x={x} y={y} />
-      <% end %>
-      </svg>
-    </div>
+      <div class="grid cols-2 bg-gray">
+        <%= for {name, %{dimensions: %{width: width, height: height}, world: world}} <- @worlds do %>
+          <div class="map-container">
+            <svg
+              viewBox={"0 0 #{width} #{height}"}
+              xmlns="http://www.w3.org/2000/svg"
+              version="1.1"
+              class="map"
+            >
+            <%= for {{x, y}, cell} <- world do %>
+              <GameComponent.tile cell={cell} x={x} y={y} />
+            <% end %>
+            <text x="1" y="0.75" style="font-size: 0.5px; font-family: verdana;" class="ttl">
+              <%= name %>
+            </text>
+            </svg>
+          </div>
+        <% end %>
+      </div>
     """
   end
 end
