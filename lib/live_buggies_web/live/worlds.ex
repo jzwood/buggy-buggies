@@ -10,7 +10,7 @@ defmodule LiveBuggiesWeb.LiveWorlds do
 
   def render(assigns) do
     ~H"""
-      <div class="grid cols-2 bg-gray">
+      <div class="cg0 columns-1 columns-2-l bg-gray">
         <%= for {name, %{dimensions: %{width: width, height: height}, world: world}} <- @worlds do %>
           <div class="map-container">
             <svg

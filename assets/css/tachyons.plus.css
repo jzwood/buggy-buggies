@@ -35,6 +35,14 @@
   row-gap: 4rem;
 }
 
+.columns-1 {
+  columns: 1 auto;
+}
+
+.cg0 {
+  column-gap: 0;
+}
+
 @media screen and (min-width: 30em) {
   .gh0-m {
     column-gap: 0;
@@ -71,6 +79,12 @@
   }
   .gv5-m {
     row-gap: 4rem;
+  }
+}
+
+@media screen and (min-width: 60em) {
+  .columns-2-l {
+    columns: 2 auto;
   }
 }
 
