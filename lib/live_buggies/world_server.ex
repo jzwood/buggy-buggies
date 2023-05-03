@@ -19,7 +19,7 @@ defmodule LiveBuggies.WorldServer do
 
   @impl true
   def init(_) do
-    worlds = CreateWorlds.get_ascii_worlds()
+    worlds = CreateWorlds.create_worlds()
     {:ok, worlds}
   end
 

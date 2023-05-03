@@ -25,19 +25,11 @@ defmodule LiveBuggiesWeb.LiveGame do
   end
 
   def handle_info(msg, socket) do
-    # IO.inspect(msg.payload, label: "PAYLOAD")
     {:noreply, assign(socket, msg.payload)}
   end
 
   def update_game(game: %Game{id: game_id} = game) do
     LiveBuggiesWeb.Endpoint.broadcast_from(self(), game_id, "update_game", game: game)
-  end
-
-  defp get_world_dimensions(world) do
-    {mw, mh} =
-      Enum.reduce(world, {0, 0}, fn {{x, y}, _val}, {mw, mh} -> {max(mw, x), max(mh, y)} end)
-
-    %{mw: mw + 1, mh: mh + 1}
   end
 
   defp orientation_of(%Player{history: []}), do: 0
@@ -59,17 +51,15 @@ defmodule LiveBuggiesWeb.LiveGame do
   end
 
   def render(assigns) do
-    assigns = assign(assigns, :dim, get_world_dimensions(assigns.game.world))
-
     ~H"""
     <div class="map-container">
       <svg
-        viewBox={"0 0 #{@dim.mw} #{@dim.mh}"}
+        viewBox={"0 0 #{@game.dimensions.width} #{@game.dimensions.height}"}
         xmlns="http://www.w3.org/2000/svg"
         version="1.1"
         class="map"
       >
-      <rect x="0" y="0" width={@dim.mw} height={@dim.mh} fill="gray" shape-rendering="optimizeSpeed" />
+      <rect x="0" y="0" width={@game.dimensions.width} height={@game.dimensions.height} fill="gray" shape-rendering="optimizeSpeed" />
       <%= for %{history: history} <- Map.values(@game.players) do %>
         <%= for [{x1, y1}, {x2, y2}] <- history_to_points(history) do %>
           <GameComponent.tire_tracks x1={x1} y1={y1} x2={x2} y2={y2} />

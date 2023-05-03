@@ -66,7 +66,7 @@ defmodule CreateWorlds do
         {handle, %{x: x, y: y}}
       end)
 
-    %{world: world, players: players, you: player}
+    %{world: world, dimensions: game.dimensions, players: players, you: player}
   end
 
   defp transform_world(world) do
@@ -76,7 +76,14 @@ defmodule CreateWorlds do
     |> Enum.into(%{})
   end
 
-  def get_ascii_worlds do
+  defp get_world_dimensions(world) do
+    {mw, mh} =
+      Enum.reduce(world, {0, 0}, fn {{x, y}, _val}, {mw, mh} -> {max(mw, x), max(mh, y)} end)
+
+    %Dimensions{width: mw + 1, height: mh + 1}
+  end
+
+  def create_worlds() do
     working_dir = Path.dirname(__ENV__.file)
     target_dir = "raw_worlds"
     abs_path = Path.join(working_dir, target_dir)
@@ -89,16 +96,11 @@ defmodule CreateWorlds do
       contents = File.read!(path)
       world = create_world(contents)
       root = Path.rootname(file)
-      {root, world}
+      dimensions = get_world_dimensions(world)
+      {root, %{dimensions: dimensions, world: world}}
     end)
     |> Map.new()
   end
-
-  # def create_worlds(ascii_worlds) do
-  # ascii_worlds
-  # |> Enum.map(&from_ascii/1)
-  # |> Enum.map(&transform_world/1)
-  # end
 
   defp create_world(ascii_world) do
     ascii_world

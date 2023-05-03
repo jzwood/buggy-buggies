@@ -9,10 +9,15 @@ defmodule Player do
             history: []
 end
 
+defmodule Dimensions do
+  @derive Jason.Encoder
+  defstruct width: 0, height: 0
+end
+
 defmodule Game do
   @expire_seconds 60 * 60
 
-  defstruct id: nil, world: %{}, host_secret: "", players: %{}, updated_at: 0
+  defstruct id: nil, world: %{}, dimensions: %Dimensions{},  host_secret: "", players: %{}, updated_at: 0
 
   def expire_seconds(), do: @expire_seconds
 
@@ -69,12 +74,6 @@ defmodule Game do
   def upsert_clock(%Game{} = game) do
     %Game{game | updated_at: now()}
   end
-
-  # def start(%Game{host_secret: host_secret, open: false} = game, host_secret) do
-  # {:ok, %{game | open: true}}
-  # end
-
-  # def start(_), do: :error
 end
 
 defmodule World do
