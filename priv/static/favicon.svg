@@ -1,0 +1,7 @@
+<svg viewBox="0 0 1 1" xmlns="http://www.w3.org/2000/svg" version="1.1">
+  <rect fill="red" x="0.25" y="0" width="0.5" height="1" shape-rendering="geometricPrecision"></rect>
+  <rect x="0.05" y="0.1" width="0.2" height="0.3" fill="black" shape-rendering="geometricPrecision"></rect>
+  <rect x="0.75" y="0.1" width="0.2" height="0.3" fill="black" shape-rendering="geometricPrecision"></rect>
+  <rect x="0.05" y="0.6" width="0.2" height="0.3" fill="black" shape-rendering="geometricPrecision"></rect>
+  <rect x="0.75" y="0.6" width="0.2" height="0.3" fill="black" shape-rendering="geometricPrecision"></rect>
+</svg>

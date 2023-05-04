@@ -11,7 +11,7 @@ defmodule CreateWorlds do
   def snd({_, b}), do: b
 
   defp is_raw_world_map?(file_name) do
-    String.match?(file_name, ~r/^w\d+\.txt$/)
+    String.match?(file_name, ~r/^\w+\.txt$/)
   end
 
   defp char_to_tile(char) when is_binary(char) do

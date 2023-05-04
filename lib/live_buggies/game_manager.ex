@@ -24,7 +24,7 @@ defmodule LiveBuggies.GameManager do
 
   def host(handle: handle) do
     game_id = UUID.uuid4()
-    %{dimensions: dimensions, world: world} = WorldServer.get("w0")
+    %{dimensions: dimensions, world: world} = WorldServer.get("rng")
     secret = UUID.uuid4()
 
     game =
