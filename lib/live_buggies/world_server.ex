@@ -1,6 +1,8 @@
 defmodule LiveBuggies.WorldServer do
   use GenServer
 
+  @worlds CreateWorlds.create_worlds()
+
   def start_link(_) do
     GenServer.start_link(__MODULE__, %{}, name: __MODULE__)
   end
@@ -19,8 +21,7 @@ defmodule LiveBuggies.WorldServer do
 
   @impl true
   def init(_) do
-    worlds = CreateWorlds.create_worlds()
-    {:ok, worlds}
+    {:ok, @worlds}
   end
 
   @impl true

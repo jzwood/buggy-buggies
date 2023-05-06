@@ -48,6 +48,9 @@ defmodule LiveBuggiesWeb.LiveHome do
           <li>
             <a href="https://github.com/jzwood/buggy-buggies/#complete-api" target="_blank">full api</a>
           </li>
+          <li>
+            <a data-phx-link="redirect" data-phx-link-state="push" href="/worlds">maps</a>
+          </li>
         </ol>
         <h2>watch</h2>
         <%= if length(@games) == 0 do %>
