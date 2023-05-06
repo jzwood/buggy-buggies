@@ -46,7 +46,7 @@ defmodule LiveBuggiesWeb.LiveHome do
             <a href="https://github.com/jzwood/buggy-buggies/tree/main/examples" target="_blank">sample buggy code</a>
           </li>
           <li>
-            <a href="https://github.com/jzwood/buggy-buggies/" target="_blank">full api</a>
+            <a href="https://github.com/jzwood/buggy-buggies/#complete-api" target="_blank">full api</a>
           </li>
         </ol>
         <h2>watch</h2>

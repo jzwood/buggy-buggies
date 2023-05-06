@@ -37,7 +37,7 @@ defmodule Game do
   end
 
   def add_player(%Game{} = game, handle: handle, secret: secret) do
-    {x, y} = World.random_empty(game.world)
+    {x, y} = World.random_empty(game)
     index = Enum.count(game.players)
 
     Game.upsert_player(game, secret, %Player{
@@ -51,7 +51,7 @@ defmodule Game do
 
   def reset_player!(%Game{} = game, secret: secret) do
     {:ok, player} = fetch_player(game, secret)
-    {x, y} = World.random_empty(game.world)
+    {x, y} = World.random_empty(game)
 
     upsert_player(game, secret, %Player{
       player
@@ -66,6 +66,11 @@ defmodule Game do
   def reset_players(%Game{} = game) do
     secrets = Map.keys(game.players)
     Enum.reduce(secrets, game, fn secret, game -> Game.reset_player!(game, secret: secret) end)
+  end
+
+  def get_player_positions(%Game{} = game) do
+    Map.values(game.players)
+    |> MapSet.new()
   end
 
   def upsert_player(%Game{} = game, secret, player) do
@@ -108,9 +113,9 @@ defmodule World do
     end
   end
 
-  defp move(world, %Player{boom: true} = player, _m), do: {:ok, world, player}
+  defp move(game, %Player{boom: true} = player, _m), do: {:ok, game.world, player}
 
-  defp move(world, %Player{x: px, y: py} = player, {mx, my}) do
+  defp move(%Game{world: world} = game, %Player{x: px, y: py} = player, {mx, my}) do
     x = px + mx
     y = py + my
 
@@ -124,8 +129,8 @@ defmodule World do
       :coin ->
         world =
           world
+          |> Map.replace(World.random_empty(game), :coin)
           |> Map.replace({x, y}, :empty)
-          |> Map.replace(World.random_empty(world), :coin)
 
         player =
           player
@@ -180,10 +185,11 @@ defmodule World do
     end
   end
 
-  def random_empty(world) do
+  def random_empty(%Game{world: world} = game) do
+    player_positions = Game.get_player_positions(game)
     world
     |> Map.filter(fn
-      {_k, :empty} -> true
+      {xy, :empty} -> not MapSet.member?(player_positions, xy)
       {_k, _v} -> false
     end)
     |> Map.keys()
@@ -201,10 +207,10 @@ defmodule World do
     |> Enum.random()
   end
 
-  def next_world(game: %Game{world: world, players: players}, player: player, move: direction) do
+  def next_world(game: %Game{players: players} = game, player: player, move: direction) do
     with {:ok, {mx, my}} <- parse_direction(direction),
          :ok <- collision?(player: player, move: {mx, my}, players: players),
-         {:ok, world, player} <- move(world, player, {mx, my}) do
+         {:ok, world, player} <- move(game, player, {mx, my}) do
       {:ok, world, player}
     end
   end

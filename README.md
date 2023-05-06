@@ -40,10 +40,13 @@ GET  /api/game/:game_id/player/:secret/purge  // TODO: removes all players from 
 
 ### RUN LOCALLY
 
+Install Elixir: https://elixir-lang.org/install.html
+
     mix deps.get
     mix compile
     mix start
-    open http://localhost:4000
+
+goto http://localhost:4000
 
     SANDBOX=true mix start  # run with rate limiting turned off
 
