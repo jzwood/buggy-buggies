@@ -90,6 +90,10 @@ defmodule LiveBuggies.GameManager do
     genserver_call(game_id, {:reset, secret})
   end
 
+  def kick(game_id: game_id, secret: secret, handle: handle) do
+    genserver_call(game_id, {:kick, secret, handle})
+  end
+
   def expired?(game_id: game_id) do
     genserver_call(game_id, :expired?)
   end
@@ -162,7 +166,7 @@ defmodule LiveBuggies.GameManager do
 
       {:reply, {:ok, player_game}, game}
     else
-      err -> {:reply, err, game}
+      err -> {:reply, {:error, err}, game}
     end
   end
 
@@ -175,22 +179,38 @@ defmodule LiveBuggies.GameManager do
         {:reply, {:ok, player_game}, game}
 
       err ->
-        {:reply, err, game}
+        {:reply, {:error, err}, game}
     end
   end
 
   @impl true
-  def handle_call({:reset, secret}, _from, %Game{} = game) do
-    if secret == game.host_secret do
-      game =
-        Game.reset_players(game)
-        |> Game.upsert_clock()
+  def handle_call({:reset, secret}, _from, %Game{host_secret: secret} = game) do
+    game =
+      Game.reset_players(game)
+      |> Game.upsert_clock()
 
+    LiveGame.update_game(game: game)
+    {:reply, {:ok, :ok}, game}
+  end
+
+  def handle_call({:reset, _secret}, _from, game) do
+    {:reply, {:error, "unauthorized"}, game}
+  end
+
+  @impl true
+  def handle_call({:kick, secret, handle}, _from, %Game{host_secret: secret, players: players} = game) do
+    if players[secret].handle == handle do
+      {:reply, {:error, "cannot kick host"}, game}
+    else
+      game = Game.kick_player(game, handle: handle)
       LiveGame.update_game(game: game)
       {:reply, {:ok, :ok}, game}
-    else
-      {:reply, :unauthorized, game}
     end
+  end
+
+  @impl true
+  def handle_call({:kick, _secret, _handle}, _from, game) do
+    {:reply, {:error, "unauthorized"}, game}
   end
 
   @impl true

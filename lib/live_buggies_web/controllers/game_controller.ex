@@ -19,7 +19,7 @@ defmodule LiveBuggiesWeb.GameController do
     end
   end
 
-  def host(conn, _), do: failure(conn)
+  def host(conn, _), do: failure(conn, "invalid host args")
 
   # JOIN
   def join(conn, %{"game_id" => game_id, "handle" => handle}) do
@@ -30,7 +30,18 @@ defmodule LiveBuggiesWeb.GameController do
     end
   end
 
-  def join(conn, _), do: failure(conn)
+  def join(conn, _), do: failure(conn, "invalid join args")
+
+  # KICK
+  def kick(conn, %{"game_id" => game_id, "secret" => secret, "handle" => handle}) do
+    case GameManager.kick(game_id: game_id, secret: secret, handle: handle) do
+      {:ok, game} -> success(conn, game)
+      {:error, msg} -> failure(conn, msg)
+      _ -> failure(conn)
+    end
+  end
+
+  def kick(conn, _), do: failure(conn, "invalid kick args")
 
   # MOVE
   def move(conn, %{"game_id" => game_id, "secret" => secret, "direction" => direction}) do
@@ -43,7 +54,7 @@ defmodule LiveBuggiesWeb.GameController do
     end
   end
 
-  def move(conn, _), do: failure(conn)
+  def move(conn, _), do: failure(conn, "invalid move args")
 
   # INFO
   def info(conn, %{"game_id" => game_id, "secret" => secret}) do
@@ -56,7 +67,7 @@ defmodule LiveBuggiesWeb.GameController do
     end
   end
 
-  def info(conn, _), do: failure(conn)
+  def info(conn, _), do: failure(conn, "invalid info args")
 
   # RESTART
   def reset(conn, %{"game_id" => game_id, "secret" => secret}) do
@@ -69,7 +80,7 @@ defmodule LiveBuggiesWeb.GameController do
     end
   end
 
-  def reset(conn, _), do: failure(conn)
+  def reset(conn, _), do: failure(conn, "invalid reset args")
 
   # KILL
   def kill(conn, %{"game_id" => game_id}) do
@@ -89,7 +100,7 @@ defmodule LiveBuggiesWeb.GameController do
     json(conn, %{success: true, reason: nil, result: result})
   end
 
-  defp failure(conn, reason \\ "failed") do
+  defp failure(conn, reason \\ "something went wrong") do
     json(conn, %{success: false, reason: reason, result: nil})
   end
 end

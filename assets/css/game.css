@@ -47,7 +47,6 @@ svg.map {
   --color: #CCC;
   fill: var(--color);
   color: var(--color);
-  stroke: 1px black;
 }
 
 .buggy {}

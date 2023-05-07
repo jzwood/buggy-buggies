@@ -35,8 +35,8 @@ GET  /api/game/:game_id/player/:secret/move/:direction  // move buggy 1 square
 
 ### Host API
 ```
-GET  /api/game/:game_id/player/:secret/reset  // resets all players' positions and purses
-GET  /api/game/:game_id/player/:secret/kick  // TODO: removes all players from game other than host
+GET  /api/game/:game_id/player/:secret/reset         // resets all players' positions and purses
+GET  /api/game/:game_id/player/:secret/kick/:handle  // kicks player out of game
 ```
 
 ### RUN LOCALLY

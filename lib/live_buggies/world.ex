@@ -52,6 +52,11 @@ defmodule Game do
     })
   end
 
+  def kick_player(%Game{} = game, handle: handle) do
+    # TODO remove player with given handle
+    game
+  end
+
   def reset_player!(%Game{} = game, secret: secret) do
     {:ok, player} = fetch_player(game, secret)
     {x, y} = World.random_empty(game)
