@@ -23,6 +23,7 @@ The meta-game is how to use these APIs to write a bot to play Buggy Buggies.
 ### Join Game
 ```
 GET  /api/host/:handle                // create game and join
+GET  /api/host/:handle/map/:name      // create game with named map and join
 GET  /api/game/:game_id/join/:handle  // join game
 ```
 
@@ -35,7 +36,7 @@ GET  /api/game/:game_id/player/:secret/move/:direction  // move buggy 1 square
 ### Host API
 ```
 GET  /api/game/:game_id/player/:secret/reset  // resets all players' positions and purses
-GET  /api/game/:game_id/player/:secret/purge  // TODO: removes all players from game other than host
+GET  /api/game/:game_id/player/:secret/kick  // TODO: removes all players from game other than host
 ```
 
 ### RUN LOCALLY

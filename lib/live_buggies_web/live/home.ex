@@ -31,38 +31,42 @@ defmodule LiveBuggiesWeb.LiveHome do
     <div class="flex flex-column min-vh-100">
       <main class="worlds mw8 center items-baseline gv3 gh4 ph3 pv2 pv4-m pv5-l">
         <h2>buggy buggies</h2>
-        <p>
+        <p class="f4">
           write the best dune-buggy AI.<br>
           collect gold.<br>
           avoid crashing.<br>
-          out-code friends.
+          PvP friends.
         </p>
         <h2>host</h2>
-        <pre class="break-spaces break-word">GET /api/host/&lt;handle&gt;</pre>
+        <div>
+          <pre class="break-spaces break-word">GET /api/host/&lt;handle&gt;[/map/&lt;name&gt;]</pre>
+          <ol>
+            <li class="f4">
+              see <a data-phx-link="redirect" data-phx-link-state="push" href="/worlds">maps</a>
+            </li>
+          </ol>
+        </div>
         <h2>friends</h2>
         <pre class="break-spaces break-word">GET /api/game/&lt;game_id&gt;/join/&lt;handle&gt;</pre>
         <h2>move<sup class="courier normal">*</sup></h2>
         <pre class="break-spaces break-word">GET /api/game/&lt;game_id&gt;/player/&lt;secret&gt;/move/&lt;N|E|S|W&gt;</pre>
-        <h2>docs</h2>
+        <h2>learn</h2>
         <ol>
           <li>
-            <a href="https://github.com/jzwood/buggy-buggies/tree/main/examples" target="_blank">sample buggy code</a>
+            <a class="f4" href="https://github.com/jzwood/buggy-buggies/#complete-api" target="_blank">full api</a>
           </li>
           <li>
-            <a href="https://github.com/jzwood/buggy-buggies/#complete-api" target="_blank">full api</a>
-          </li>
-          <li>
-            <a data-phx-link="redirect" data-phx-link-state="push" href="/worlds">maps</a>
+            <a class="f4" href="https://github.com/jzwood/buggy-buggies/tree/main/examples" target="_blank">example code</a>
           </li>
         </ol>
         <h2>watch</h2>
         <%= if length(@games) == 0 do %>
-          <i>no games in progress</i>
+          <i class="f4">no games in progress</i>
         <% end %>
         <ol>
           <%= for game_id <- @games do %>
             <li>
-              <a data-phx-link="redirect" data-phx-link-state="push" href={"/game/#{ game_id }"}><%= game_id %></a>
+              <a class="f4" data-phx-link="redirect" data-phx-link-state="push" href={"/game/#{ game_id }"}><%= game_id %></a>
             </li>
           <% end %>
         </ol>
