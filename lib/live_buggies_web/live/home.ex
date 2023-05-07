@@ -1,4 +1,7 @@
 defmodule LiveBuggiesWeb.LiveHome do
+  @moduledoc """
+  liveview app homepage
+  """
   use Phoenix.LiveView
 
   @game_list "games"

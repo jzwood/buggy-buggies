@@ -1,4 +1,5 @@
 defmodule LiveBuggiesWeb.GameComponent do
+  @moduledoc false
   use Phoenix.Component
 
   def tile(%{cell: cell} = assigns) do

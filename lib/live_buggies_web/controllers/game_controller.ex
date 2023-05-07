@@ -3,6 +3,14 @@ defmodule LiveBuggiesWeb.GameController do
   alias LiveBuggies.GameManager
 
   # HOST
+  def host(conn, %{"handle" => handle, "map" => map}) do
+    case GameManager.host(handle: handle, map: map) do
+      {:ok, data} -> success(conn, data)
+      {:error, msg} -> failure(conn, msg)
+      _ -> failure(conn)
+    end
+  end
+
   def host(conn, %{"handle" => handle}) do
     case GameManager.host(handle: handle) do
       {:ok, data} -> success(conn, data)

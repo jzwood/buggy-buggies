@@ -1,4 +1,8 @@
 defmodule LiveBuggiesWeb.LiveGame do
+  @moduledoc """
+  liveview representation of a specific game
+  """
+
   use Phoenix.LiveView
   use Phoenix.HTML
   alias LiveBuggiesWeb.GameComponent

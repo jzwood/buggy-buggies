@@ -1,10 +1,14 @@
 defmodule LiveBuggiesWeb.LiveWorlds do
+  @moduledoc """
+  shows all world maps
+  """
+
   use Phoenix.LiveView
   use Phoenix.HTML
   alias LiveBuggiesWeb.GameComponent
 
   def mount(_session, _params, socket) do
-    worlds = LiveBuggies.WorldServer.all()
+    worlds = LiveBuggies.WorldMaps.all()
     {:ok, assign(socket, :worlds, worlds)}
   end
 

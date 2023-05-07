@@ -1,4 +1,7 @@
 defmodule LiveBuggies.Cron do
+  @moduledoc """
+  checks for expired games periodically
+  """
   use GenServer
 
   alias LiveBuggies.GameManager

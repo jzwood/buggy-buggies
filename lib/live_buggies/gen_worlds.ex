@@ -1,4 +1,9 @@
 defmodule CreateWorlds do
+  @moduledoc """
+  transforms raw text versions of world maps into elixir datastructures
+  """
+  require Logger
+
   @empty " "
   @wall "+"
   @water "~"
@@ -38,7 +43,7 @@ defmodule CreateWorlds do
         :tree
 
       c ->
-        IO.inspect(c, label: "TILE")
+        Logger.info("unexpected tile #{c}")
         :error
     end
   end

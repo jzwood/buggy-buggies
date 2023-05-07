@@ -1,4 +1,7 @@
 defmodule Cache do
+  @moduledoc """
+  basic cache
+  """
   use GenServer
 
   # Public API

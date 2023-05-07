@@ -1,7 +1,10 @@
 defmodule LiveBuggies.GameManager do
+  @moduledoc """
+  the genserver that manages the gamestate for each game
+  """
   use GenServer
   alias LiveBuggiesWeb.{LiveGame, LiveHome}
-  alias LiveBuggies.WorldServer
+  alias LiveBuggies.WorldMaps
 
   defp move_example(game_id: game_id, secret: secret) do
     "curl -X GET #{LiveBuggiesWeb.Endpoint.url()}/api/game/#{game_id}/player/#{secret}/move/N"
@@ -23,8 +26,21 @@ defmodule LiveBuggies.GameManager do
   end
 
   def host(handle: handle) do
+    host(handle: handle, map: "basic")
+  end
+
+  def host(handle: handle, map: map) do
+    case WorldMaps.get(map) do
+      %{dimensions: dimensions, world: world} ->
+        host(handle: handle, dimensions: dimensions, world: world)
+
+      _ ->
+        {:error, "map not found"}
+    end
+  end
+
+  def host(handle: handle, dimensions: dimensions, world: world) do
     game_id = UUID.uuid4()
-    %{dimensions: dimensions, world: world} = WorldServer.get("basic")
     secret = UUID.uuid4()
 
     game =
@@ -152,12 +168,14 @@ defmodule LiveBuggies.GameManager do
 
   @impl true
   def handle_call({:info, secret}, _from, %Game{} = game) do
-    with {:ok, player} <- Game.fetch_player(game, secret) do
-      player_game = CreateWorlds.get_player_game(game, player)
-      game = Game.upsert_clock(game)
-      {:reply, {:ok, player_game}, game}
-    else
-      err -> {:reply, err, game}
+    case Game.fetch_player(game, secret) do
+      {:ok, player} ->
+        player_game = CreateWorlds.get_player_game(game, player)
+        game = Game.upsert_clock(game)
+        {:reply, {:ok, player_game}, game}
+
+      err ->
+        {:reply, err, game}
     end
   end
 

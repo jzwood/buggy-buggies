@@ -1,4 +1,7 @@
 defmodule LiveBuggiesWeb.Throttle do
+  @moduledoc """
+  throttles api calls
+  """
   require Logger
 
   defp throttle?() do

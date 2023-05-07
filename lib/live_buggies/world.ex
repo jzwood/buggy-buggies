@@ -1,4 +1,5 @@
 defmodule Player do
+  @moduledoc false
   @derive {Jason.Encoder, only: [:handle, :purse, :boom, :x, :y]}
   defstruct handle: nil,
             index: 0,
@@ -10,11 +11,13 @@ defmodule Player do
 end
 
 defmodule Dimensions do
+  @moduledoc false
   @derive Jason.Encoder
   defstruct width: 0, height: 0
 end
 
 defmodule Game do
+  @moduledoc false
   @expire_seconds 60 * 60
 
   defstruct id: nil,
@@ -87,6 +90,7 @@ defmodule Game do
 end
 
 defmodule World do
+  @moduledoc false
   @history_limit 45
 
   defp update_history([], {x, y}), do: [{x, y}]
@@ -187,6 +191,7 @@ defmodule World do
 
   def random_empty(%Game{world: world} = game) do
     player_positions = Game.get_player_positions(game)
+
     world
     |> Map.filter(fn
       {xy, :empty} -> not MapSet.member?(player_positions, xy)
@@ -209,9 +214,8 @@ defmodule World do
 
   def next_world(game: %Game{players: players} = game, player: player, move: direction) do
     with {:ok, {mx, my}} <- parse_direction(direction),
-         :ok <- collision?(player: player, move: {mx, my}, players: players),
-         {:ok, world, player} <- move(game, player, {mx, my}) do
-      {:ok, world, player}
+         :ok <- collision?(player: player, move: {mx, my}, players: players) do
+      move(game, player, {mx, my})
     end
   end
 end
