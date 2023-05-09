@@ -166,7 +166,8 @@ defmodule LiveBuggies.GameManager do
 
       {:reply, {:ok, player_game}, game}
     else
-      err -> {:reply, {:error, err}, game}
+      {:error, _msg} = err -> {:reply, err, game}
+      err -> {:reply, err, game}
     end
   end
 

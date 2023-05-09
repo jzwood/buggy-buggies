@@ -57,7 +57,7 @@ defmodule CreateWorlds do
     end)
   end
 
-  def get_player_game(%Game{} = game, %Player{} = player) do
+  def get_player_game(%Game{players: players} = game, %Player{handle: handle} = player) do
     world =
       game.world
       |> Enum.filter(fn
@@ -67,9 +67,13 @@ defmodule CreateWorlds do
       |> Map.new(fn {{x, y}, tile} -> {"#{x},#{y}", tile} end)
 
     players =
-      Map.new(game.players, fn {_secret, %Player{handle: handle, x: x, y: y}} ->
-        {handle, %{x: x, y: y}}
+      players
+      |> Enum.filter(fn
+        {_secret, %Player{handle: ^handle}} -> false
+        {_secret, _} -> true
       end)
+      |> Enum.map(fn {_secret, %Player{handle: handle, x: x, y: y}} -> {handle, %{x: x, y: y}} end)
+      |> Map.new()
 
     %{world: world, dimensions: game.dimensions, players: players, you: player}
   end
