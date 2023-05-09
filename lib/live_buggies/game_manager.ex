@@ -198,7 +198,11 @@ defmodule LiveBuggies.GameManager do
   end
 
   @impl true
-  def handle_call({:kick, secret, handle}, _from, %Game{host_secret: secret, players: players} = game) do
+  def handle_call(
+        {:kick, secret, handle},
+        _from,
+        %Game{host_secret: secret, players: players} = game
+      ) do
     if players[secret].handle == handle do
       {:reply, {:error, "cannot kick host"}, game}
     else

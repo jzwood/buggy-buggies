@@ -52,9 +52,13 @@ defmodule Game do
     })
   end
 
-  def kick_player(%Game{} = game, handle: handle) do
-    # TODO remove player with given handle
-    game
+  def kick_player(%Game{players: players} = game, handle: handle) do
+    players =
+      players
+      |> Enum.filter(fn {_secret, %Player{} = player} -> player.handle != handle end)
+      |> Map.new()
+
+    %Game{game | players: players}
   end
 
   def reset_player!(%Game{} = game, secret: secret) do
