@@ -40,8 +40,8 @@ defmodule LiveBuggies.GameManager do
   end
 
   def host(handle: handle, dimensions: dimensions, world: world) do
-    game_id = UUID.uuid4()
-    secret = UUID.uuid4()
+    game_id = SmallID.new()
+    secret = SmallID.new()
 
     game =
       %Game{
@@ -130,7 +130,7 @@ defmodule LiveBuggies.GameManager do
   @impl true
   def handle_call({:join, handle}, _from, %Game{} = game) do
     # TODO prevent users with the same handle from joining
-    secret = UUID.uuid4()
+    secret = SmallID.new()
     %Game{id: game_id} = new_game = Game.add_player(game, handle: handle, secret: secret)
 
     if Enum.count(new_game.players) > 9 do
