@@ -82,6 +82,7 @@ defmodule Game do
 
   def get_player_positions(%Game{} = game) do
     Map.values(game.players)
+    |> Enum.map(fn %Player{x: x, y: y} -> {x, y} end)
     |> MapSet.new()
   end
 
